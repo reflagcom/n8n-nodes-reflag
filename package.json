@@ -1,26 +1,28 @@
 {
-  "name": "n8n-nodes-<...>",
+  "name": "n8n-nodes-reflag",
   "version": "0.1.0",
-  "description": "",
+  "description": "n8n nodes for the Reflag service used in automation",
   "keywords": [
     "n8n-community-node-package"
   ],
   "license": "MIT",
-  "homepage": "",
+  "homepage": "https://reflag.com",
   "author": {
-    "name": "",
-    "email": ""
+    "name": "Reflag",
+    "email": "support@reflag.com"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/<...>/n8n-nodes-<...>.git"
+    "url": "https://github.com/reflagcom/n8n-nodes-reflag.git"
   },
+  "packageManager": "yarn@4.10.3",
   "engines": {
     "node": ">=20.15"
   },
   "main": "index.js",
   "scripts": {
-    "build": "npx rimraf dist && tsc && gulp build:icons",
+    "sync": "node sync.mjs",
+    "build": "npx rimraf dist && npm run sync && tsc && gulp build:icons",
     "dev": "tsc --watch",
     "format": "prettier nodes credentials --write",
     "lint": "eslint nodes credentials package.json",
@@ -33,23 +35,26 @@
   "n8n": {
     "n8nNodesApiVersion": 1,
     "credentials": [
-      "dist/credentials/ExampleCredentialsApi.credentials.js",
-      "dist/credentials/HttpBinApi.credentials.js"
+      "dist/credentials/ReflagAPI/ReflagAPI.credentials.js"
     ],
     "nodes": [
-      "dist/nodes/ExampleNode/ExampleNode.node.js",
-      "dist/nodes/HttpBin/HttpBin.node.js"
+      "dist/nodes/ReflagAPI/ReflagAPI.node.js"
     ]
   },
   "devDependencies": {
     "@typescript-eslint/parser": "~8.32.0",
+    "chalk": "^5.6.2",
     "eslint": "^8.57.0",
     "eslint-plugin-n8n-nodes-base": "^1.16.3",
     "gulp": "^5.0.0",
-    "prettier": "^3.5.3",
+    "n8n-workflow": "^1.111.0",
+    "prettier": "^3.6.2",
     "typescript": "^5.8.2"
   },
   "peerDependencies": {
     "n8n-workflow": "*"
+  },
+  "dependencies": {
+    "@devlikeapro/n8n-openapi-node": "^0.1.4"
   }
 }
