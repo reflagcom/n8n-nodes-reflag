@@ -1,11 +1,13 @@
 import { INodeType, INodeTypeDescription } from 'n8n-workflow';
 import { N8NPropertiesBuilder, N8NPropertiesBuilderConfig } from '@devlikeapro/n8n-openapi-node';
-import * as doc from './gen/openapi.json';
+import openapiSpec from './gen/openapi.json';
+import packageJson from '../../package.json';
 
 const config: N8NPropertiesBuilderConfig = {};
-const parser = new N8NPropertiesBuilder(doc, config);
+const parser = new N8NPropertiesBuilder(openapiSpec, config);
 const properties = parser.build();
-const version = 1;
+const version = packageJson.version;
+const majorVersion = parseInt(version.split('.')[0]);
 
 export class ReflagAPI implements INodeType {
 	description: INodeTypeDescription = {
@@ -16,7 +18,7 @@ export class ReflagAPI implements INodeType {
 			dark: 'file:reflag-dark.svg',
 		},
 		group: ['transform'],
-		version,
+		version: majorVersion,
 		subtitle: '={{$parameter["operation"] + ": " + $parameter["resource"]}}',
 		description: 'Automate your feature flagging through the Reflag API',
 		defaults: {
