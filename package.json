@@ -16,6 +16,9 @@
     "url": "https://github.com/reflagcom/n8n-nodes-reflag.git"
   },
   "packageManager": "yarn@4.10.3",
+  "publishConfig": {
+    "access": "public"
+  },
   "engines": {
     "node": ">=20.15"
   },
@@ -24,9 +27,10 @@
     "sync": "node sync.mjs",
     "build": "npx rimraf dist && npm run sync && tsc && gulp build:icons",
     "dev": "tsc --watch",
-    "format": "prettier nodes credentials --write",
-    "lint": "eslint nodes credentials package.json",
-    "lintfix": "eslint nodes credentials package.json --fix",
+    "lint": "eslint .",
+    "lint:ci": "eslint --output-file eslint-report.json --format json .",
+    "prettier": "prettier --check .",
+    "format": "yarn lint --fix && yarn prettier --write",
     "prepublishOnly": "npm run build && npm run lint -c .eslintrc.prepublish.js nodes credentials package.json"
   },
   "files": [
@@ -35,15 +39,16 @@
   "n8n": {
     "n8nNodesApiVersion": 1,
     "credentials": [
-      "dist/credentials/ReflagAPI/ReflagAPI.credentials.js"
+      "dist/credentials/ReflagApi/ReflagApi.credentials.js"
     ],
     "nodes": [
-      "dist/nodes/ReflagAPI/ReflagAPI.node.js"
+      "dist/nodes/ReflagApi/ReflagApi.node.js"
     ]
   },
   "devDependencies": {
     "@typescript-eslint/parser": "~8.32.0",
     "chalk": "^5.6.2",
+    "compare-versions": "^6.1.1",
     "eslint": "^8.57.0",
     "eslint-plugin-n8n-nodes-base": "^1.16.3",
     "gulp": "^5.0.0",

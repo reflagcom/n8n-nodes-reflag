@@ -1,8 +1,8 @@
 import { IAuthenticateGeneric, ICredentialType, INodeProperties } from 'n8n-workflow';
 
-export class ReflagAPI implements ICredentialType {
-	name = 'ReflagAPI';
-	displayName = 'Reflag API';
+export class ReflagApi implements ICredentialType {
+	name = 'reflagApi';
+	displayName = 'Reflag Api';
 	// Uses the link to this tutorial as an example
 	// Replace with your own docs links when building your own nodes
 	documentationUrl = 'https://docs.reflag.com';
@@ -11,6 +11,7 @@ export class ReflagAPI implements ICredentialType {
 			displayName: 'API Key',
 			name: 'apiKey',
 			type: 'string',
+			typeOptions: { password: true },
 			default: '',
 		},
 		{

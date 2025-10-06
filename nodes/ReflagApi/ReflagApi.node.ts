@@ -9,10 +9,10 @@ const properties = parser.build();
 const version = packageJson.version;
 const majorVersion = parseInt(version.split('.')[0]);
 
-export class ReflagAPI implements INodeType {
+export class ReflagApi implements INodeType {
 	description: INodeTypeDescription = {
-		displayName: 'Reflag',
-		name: 'reflag',
+		name: 'reflagApi',
+		displayName: 'Reflag Api',
 		icon: {
 			light: 'file:reflag-light.svg',
 			dark: 'file:reflag-dark.svg',
@@ -28,7 +28,7 @@ export class ReflagAPI implements INodeType {
 		outputs: ['main'],
 		credentials: [
 			{
-				name: 'ReflagAPI',
+				name: 'ReflagApi',
 				required: true,
 			},
 		],
@@ -40,6 +40,6 @@ export class ReflagAPI implements INodeType {
 			},
 			baseURL: '={{$credentials.url}}',
 		},
-		properties: properties,
+		properties,
 	};
 }
