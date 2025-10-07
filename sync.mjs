@@ -4,7 +4,7 @@ import path from 'node:path';
 import { compareVersions } from 'compare-versions';
 
 const OPENAPI_URL = new URL('https://app.reflag.com/openapi.json');
-const OUTPUT_OPENAPI_PATH = path.join(process.cwd(), 'nodes', 'ReflagApi', 'gen', 'openapi.json');
+const OUTPUT_OPENAPI_PATH = path.join(process.cwd(), 'nodes', 'Reflag', 'gen', 'openapi.json');
 const PACKAGE_JSON_PATH = path.join(process.cwd(), 'package.json');
 
 export default async function sync() {

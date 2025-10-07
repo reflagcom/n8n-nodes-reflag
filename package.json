@@ -39,10 +39,10 @@
   "n8n": {
     "n8nNodesApiVersion": 1,
     "credentials": [
-      "dist/credentials/ReflagApi/ReflagApi.credentials.js"
+      "dist/credentials/Reflag/Reflag.credentials.js"
     ],
     "nodes": [
-      "dist/nodes/ReflagApi/ReflagApi.node.js"
+      "dist/nodes/Reflag/Reflag.node.js"
     ]
   },
   "devDependencies": {

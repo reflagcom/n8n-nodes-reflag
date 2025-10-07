@@ -1,8 +1,10 @@
 {
-	"node": "n8n-nodes-base.ReflagApi",
+	"node": "n8n-nodes-base.Reflag",
 	"nodeVersion": "1.0",
 	"codexVersion": "1.0",
-	"categories": ["Miscellaneous"],
+	"categories": [
+		"Miscellaneous"
+	],
 	"resources": {
 		"credentialDocumentation": [
 			{
