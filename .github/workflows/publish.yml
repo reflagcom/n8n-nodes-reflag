@@ -13,6 +13,7 @@ jobs:
   release:
     name: Publish Nodes
     runs-on: ubuntu-latest
+    environment: NPM
     steps:
       - name: Checkout source code
         uses: actions/checkout@v4
