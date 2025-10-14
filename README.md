@@ -1,6 +1,6 @@
 # n8n-nodes-reflag
 
-This is an n8n community node. It lets you use Reflag feature flagging service in your n8n workflows.
+This is an [n8n community node npm package](https://www.npmjs.com/package/@reflag/n8n-nodes-reflag). It lets you use Reflag feature flagging service in your n8n workflows.
 
 Reflag is a feature flag management platform with self-cleaning flags, strong type-safety, gradual rollouts, and built-in Linear integration.
 
