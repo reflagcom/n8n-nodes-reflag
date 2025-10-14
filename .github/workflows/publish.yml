@@ -53,13 +53,10 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           tag_name: v${{ steps.get_version.outputs.version }}
-          release_name: Release v${{ steps.get_version.outputs.version }}
+          release_name: v${{ steps.get_version.outputs.version }}
           body: |
-            ## Changes in v${{ steps.get_version.outputs.version }}
+            ## Release v${{ steps.get_version.outputs.version }}
 
-            This release includes the latest updates to the Reflag n8n nodes.
-
-            ### Installation
             ```bash
             npm install @reflag/n8n-nodes-reflag@${{ steps.get_version.outputs.version }}
             ```
