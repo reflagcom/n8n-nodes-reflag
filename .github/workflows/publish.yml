@@ -27,8 +27,6 @@ jobs:
           node-version-file: .nvmrc
           cache: yarn
           cache-dependency-path: '**/yarn.lock'
-          registry-url: https://registry.npmjs.org
-          scope: '@reflag'
 
       - name: Install dependencies
         run: yarn install --immutable
@@ -36,14 +34,10 @@ jobs:
       - name: Build nodes
         run: yarn build
 
-      - name: Setup Auth Token
-        run: |
-          yarn config set npmScopes.reflag.npmAuthToken $NODE_AUTH_TOKEN
+      - name: Publish nodes
+        run: yarn npm publish --provenance
         env:
           NODE_AUTH_TOKEN: ${{ secrets.REFLAG_NPM_TOKEN }}
-
-      - name: Publish nodes
-        run: yarn npm publish --provenance --access public
 
       - name: Get package version
         id: get_version
