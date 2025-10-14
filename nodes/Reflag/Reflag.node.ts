@@ -28,7 +28,7 @@ export class Reflag implements INodeType {
 		outputs: ['main'],
 		credentials: [
 			{
-				name: 'Reflag',
+				name: 'ReflagApi',
 				required: true,
 			},
 		],

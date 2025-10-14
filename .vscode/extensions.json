@@ -1,7 +1,8 @@
 {
 	"recommendations": [
 		"dbaeumer.vscode-eslint",
-		"EditorConfig.EditorConfig",
-		"esbenp.prettier-vscode"
+		"esbenp.prettier-vscode",
+		"editorconfig.editorconfig",
+		"rohit-gohri.format-code-action"
 	]
 }

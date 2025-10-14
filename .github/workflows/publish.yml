@@ -1,0 +1,64 @@
+name: Publish Nodes
+
+permissions:
+  contents: write
+  id-token: write
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  release:
+    name: Publish Nodes
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout source code
+        uses: actions/checkout@v4
+
+      - name: Enable corepack
+        run: corepack enable
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version-file: .nvmrc
+          cache: yarn
+          cache-dependency-path: '**/yarn.lock'
+          registry-url: https://registry.npmjs.org
+          scope: '@reflag'
+
+      - name: Install dependencies
+        run: yarn install --immutable
+
+      - name: Build nodes
+        run: yarn build
+
+      - name: Publish nodes
+        run: npm publish --provenance --access public
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.REFLAG_NPM_TOKEN }}
+
+      - name: Get package version
+        id: get_version
+        run: echo "version=$(node -p "require('./package.json').version")" >> $GITHUB_OUTPUT
+
+      - name: Create GitHub Release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: v${{ steps.get_version.outputs.version }}
+          release_name: Release v${{ steps.get_version.outputs.version }}
+          body: |
+            ## Changes in v${{ steps.get_version.outputs.version }}
+
+            This release includes the latest updates to the Reflag n8n nodes.
+
+            ### Installation
+            ```bash
+            npm install @reflag/n8n-nodes-reflag@${{ steps.get_version.outputs.version }}
+            ```
+          draft: false
+          prerelease: false

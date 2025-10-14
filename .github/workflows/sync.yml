@@ -1,0 +1,66 @@
+name: Sync OpenAPI spec
+
+permissions:
+  statuses: write
+  checks: write
+  contents: read
+  pull-requests: write
+
+on:
+  schedule:
+    - cron: '0 8 * * *' # Every day at 8:00 AM UTC
+
+jobs:
+  sync:
+    name: Sync OpenAPI spec
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout source code
+        uses: actions/checkout@v4
+
+      - name: Enable corepack
+        run: corepack enable
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version-file: .nvmrc
+          cache: yarn
+          cache-dependency-path: '**/yarn.lock'
+
+      - name: Restore Node.js dependencies
+        run: yarn install --immutable
+
+      - name: Get current version
+        id: current-version
+        run: echo "version=$(node -p "require('./package.json').version")" >> $GITHUB_OUTPUT
+
+      - name: Sync OpenAPI spec
+        run: yarn sync
+
+      - name: Get new version
+        id: new-version
+        run: echo "version=$(node -p "require('./package.json').version")" >> $GITHUB_OUTPUT
+
+      - name: Create Pull Request
+        uses: peter-evans/create-pull-request@v7
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          commit-message: |
+            feat: sync openapi spec
+
+            - Synced latest OpenAPI specification to version ${{ steps.new-version.outputs.version }} from ${{ steps.current-version.outputs.version }}
+          title: Sync OpenAPI spec (v${{ steps.new-version.outputs.version }})
+          body: |
+            ## Update from Reflag's OpenAPI specification.
+
+            **Version Update:**
+            - **Previous:** v${{ steps.current-version.outputs.version }}
+            - **New:** v${{ steps.new-version.outputs.version }}
+
+            ---
+            *This PR was created automatically by the sync workflow.*
+          labels: sync
+          delete-branch: true
+          branch: sync-openapi-spec
+          draft: always-true
