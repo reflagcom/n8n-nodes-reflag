@@ -1,6 +1,6 @@
 {
 	"name": "@reflag/n8n-nodes-reflag",
-	"version": "1.0.0",
+	"version": "1.0.1-rc.1",
 	"description": "n8n nodes for the Reflag service used in automation",
 	"keywords": [
 		"n8n-community-node-package"
@@ -9,7 +9,7 @@
 	"homepage": "https://reflag.com",
 	"author": {
 		"name": "Reflag",
-		"email": "support@reflag.com"
+		"email": "hello@reflag.com"
 	},
 	"repository": {
 		"type": "git",
