@@ -1,11 +1,7 @@
 import { INodeType, INodeTypeDescription } from 'n8n-workflow';
-import { N8NPropertiesBuilder, N8NPropertiesBuilderConfig } from '@devlikeapro/n8n-openapi-node';
-import openapiSpec from './gen/openapi.json';
 import packageJson from '../../package.json';
+import { properties } from './gen/properties';
 
-const config: N8NPropertiesBuilderConfig = {};
-const parser = new N8NPropertiesBuilder(openapiSpec, config);
-const properties = parser.build();
 const version = packageJson.version;
 const majorVersion = parseInt(version.split('.')[0]);
 
