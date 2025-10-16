@@ -1,788 +1,788 @@
 {
-	"openapi": "3.1.0",
-	"info": {
-		"title": "Reflag",
-		"version": "1.0.0",
-		"description": "Feature flag management API",
-		"contact": {
-			"name": "Reflag Support",
-			"url": "https://reflag.com/support"
-		},
-		"license": {
-			"name": "Proprietary",
-			"url": "https://reflag.com/"
-		}
-	},
-	"servers": [
-		{
-			"url": "https://app.reflag.com/api",
-			"description": "Production server"
-		}
-	],
-	"security": [
-		{
-			"APIKey": []
-		}
-	],
-	"paths": {
-		"/apps/{appId}": {
-			"get": {
-				"summary": "Get details of an application",
-				"description": "Retrieve a specific application by its identifier",
-				"operationId": "getApp",
-				"parameters": [
-					{
-						"in": "path",
-						"name": "appId",
-						"schema": {
-							"$ref": "#/components/schemas/appId"
-						},
-						"required": true,
-						"description": "App identifier"
-					}
-				],
-				"responses": {
-					"200": {
-						"description": "Requested resource retrieved successfully",
-						"content": {
-							"application/json": {
-								"schema": {
-									"$ref": "#/components/schemas/appHeader"
-								}
-							}
-						}
-					},
-					"400": {
-						"description": "Bad Request",
-						"content": {
-							"application/json": {
-								"schema": {
-									"$ref": "#/components/schemas/ErrorResponse"
-								}
-							}
-						}
-					},
-					"401": {
-						"description": "Unauthorized",
-						"content": {
-							"application/json": {
-								"schema": {
-									"$ref": "#/components/schemas/ErrorResponse"
-								}
-							}
-						}
-					},
-					"403": {
-						"description": "Forbidden",
-						"content": {
-							"application/json": {
-								"schema": {
-									"$ref": "#/components/schemas/ErrorResponse"
-								}
-							}
-						}
-					},
-					"404": {
-						"description": "Requested resource, or its parent, not found",
-						"content": {
-							"application/json": {
-								"schema": {
-									"$ref": "#/components/schemas/ErrorResponse"
-								}
-							}
-						}
-					}
-				}
-			}
-		},
-		"/apps": {
-			"get": {
-				"summary": "List of applications",
-				"description": "Retrieve all applications for a specific organization",
-				"operationId": "listOrgApps",
-				"parameters": [
-					{
-						"in": "query",
-						"name": "orgId",
-						"schema": {
-							"$ref": "#/components/schemas/orgId"
-						},
-						"required": true,
-						"description": "Organization identifier"
-					}
-				],
-				"responses": {
-					"200": {
-						"description": "Requested resource retrieved successfully",
-						"content": {
-							"application/json": {
-								"schema": {
-									"$ref": "#/components/schemas/appHeaderCollection"
-								}
-							}
-						}
-					},
-					"400": {
-						"description": "Bad Request",
-						"content": {
-							"application/json": {
-								"schema": {
-									"$ref": "#/components/schemas/ErrorResponse"
-								}
-							}
-						}
-					},
-					"401": {
-						"description": "Unauthorized",
-						"content": {
-							"application/json": {
-								"schema": {
-									"$ref": "#/components/schemas/ErrorResponse"
-								}
-							}
-						}
-					},
-					"403": {
-						"description": "Forbidden",
-						"content": {
-							"application/json": {
-								"schema": {
-									"$ref": "#/components/schemas/ErrorResponse"
-								}
-							}
-						}
-					},
-					"404": {
-						"description": "Requested resource, or its parent, not found",
-						"content": {
-							"application/json": {
-								"schema": {
-									"$ref": "#/components/schemas/ErrorResponse"
-								}
-							}
-						}
-					}
-				}
-			}
-		},
-		"/apps/{appId}/flags": {
-			"get": {
-				"summary": "List flags for application",
-				"description": "Retrieve all flags for a specific application",
-				"operationId": "listAppFlags",
-				"parameters": [
-					{
-						"in": "path",
-						"name": "appId",
-						"schema": {
-							"$ref": "#/components/schemas/appId"
-						},
-						"required": true,
-						"description": "App identifier"
-					}
-				],
-				"responses": {
-					"200": {
-						"description": "Requested resource retrieved successfully",
-						"content": {
-							"application/json": {
-								"schema": {
-									"$ref": "#/components/schemas/flagHeaderCollection"
-								}
-							}
-						}
-					},
-					"400": {
-						"description": "Bad Request",
-						"content": {
-							"application/json": {
-								"schema": {
-									"$ref": "#/components/schemas/ErrorResponse"
-								}
-							}
-						}
-					},
-					"401": {
-						"description": "Unauthorized",
-						"content": {
-							"application/json": {
-								"schema": {
-									"$ref": "#/components/schemas/ErrorResponse"
-								}
-							}
-						}
-					},
-					"403": {
-						"description": "Forbidden",
-						"content": {
-							"application/json": {
-								"schema": {
-									"$ref": "#/components/schemas/ErrorResponse"
-								}
-							}
-						}
-					},
-					"404": {
-						"description": "Requested resource, or its parent, not found",
-						"content": {
-							"application/json": {
-								"schema": {
-									"$ref": "#/components/schemas/ErrorResponse"
-								}
-							}
-						}
-					}
-				}
-			}
-		},
-		"/apps/{appId}/flags/{flagKey}/targeting/{envId}": {
-			"get": {
-				"summary": "Get flag targeting for an environment",
-				"description": "Retrieve targeting for a flag in an environment",
-				"operationId": "getFlagTargeting",
-				"parameters": [
-					{
-						"in": "path",
-						"name": "appId",
-						"schema": {
-							"$ref": "#/components/schemas/appId"
-						},
-						"required": true,
-						"description": "App identifier"
-					},
-					{
-						"in": "path",
-						"name": "flagKey",
-						"schema": {
-							"$ref": "#/components/schemas/flagKey"
-						},
-						"required": true,
-						"description": "Unique flag key"
-					},
-					{
-						"in": "path",
-						"name": "envId",
-						"schema": {
-							"$ref": "#/components/schemas/envId"
-						},
-						"required": true,
-						"description": "Environment identifier"
-					}
-				],
-				"responses": {
-					"200": {
-						"description": "Requested resource retrieved successfully",
-						"content": {
-							"application/json": {
-								"schema": {
-									"$ref": "#/components/schemas/flagTargeting"
-								}
-							}
-						}
-					},
-					"400": {
-						"description": "Bad Request",
-						"content": {
-							"application/json": {
-								"schema": {
-									"$ref": "#/components/schemas/ErrorResponse"
-								}
-							}
-						}
-					},
-					"401": {
-						"description": "Unauthorized",
-						"content": {
-							"application/json": {
-								"schema": {
-									"$ref": "#/components/schemas/ErrorResponse"
-								}
-							}
-						}
-					},
-					"403": {
-						"description": "Forbidden",
-						"content": {
-							"application/json": {
-								"schema": {
-									"$ref": "#/components/schemas/ErrorResponse"
-								}
-							}
-						}
-					},
-					"404": {
-						"description": "Requested resource, or its parent, not found",
-						"content": {
-							"application/json": {
-								"schema": {
-									"$ref": "#/components/schemas/ErrorResponse"
-								}
-							}
-						}
-					}
-				}
-			}
-		},
-		"/apps/{appId}/flags/specific-targets/{envId}": {
-			"patch": {
-				"summary": "Update flag specific targets for an environment",
-				"description": "Update specific companies and users for flags in an environment",
-				"operationId": "updateBulkFlagSpecificTargets",
-				"parameters": [
-					{
-						"in": "path",
-						"name": "appId",
-						"schema": {
-							"$ref": "#/components/schemas/appId"
-						},
-						"required": true,
-						"description": "App identifier"
-					},
-					{
-						"in": "path",
-						"name": "envId",
-						"schema": {
-							"$ref": "#/components/schemas/envId"
-						},
-						"required": true,
-						"description": "Environment identifier"
-					}
-				],
-				"requestBody": {
-					"content": {
-						"application/json": {
-							"schema": {
-								"$ref": "#/components/schemas/bulkUpdateFlagSpecificTargetsSchema"
-							}
-						}
-					}
-				},
-				"responses": {
-					"200": {
-						"description": "Requested resource retrieved successfully",
-						"content": {
-							"application/json": {
-								"schema": {
-									"$ref": "#/components/schemas/flagTargetingCollection"
-								}
-							}
-						}
-					},
-					"400": {
-						"description": "Bad Request",
-						"content": {
-							"application/json": {
-								"schema": {
-									"$ref": "#/components/schemas/ErrorResponse"
-								}
-							}
-						}
-					},
-					"401": {
-						"description": "Unauthorized",
-						"content": {
-							"application/json": {
-								"schema": {
-									"$ref": "#/components/schemas/ErrorResponse"
-								}
-							}
-						}
-					},
-					"403": {
-						"description": "Forbidden",
-						"content": {
-							"application/json": {
-								"schema": {
-									"$ref": "#/components/schemas/ErrorResponse"
-								}
-							}
-						}
-					},
-					"404": {
-						"description": "Requested resource, or its parent, not found",
-						"content": {
-							"application/json": {
-								"schema": {
-									"$ref": "#/components/schemas/ErrorResponse"
-								}
-							}
-						}
-					}
-				}
-			}
-		}
-	},
-	"components": {
-		"schemas": {
-			"appId": {
-				"description": "App identifier",
-				"type": "string",
-				"minLength": 1
-			},
-			"orgId": {
-				"description": "Organization identifier",
-				"type": "string",
-				"minLength": 1
-			},
-			"flagKey": {
-				"description": "Unique flag key",
-				"type": "string",
-				"minLength": 1
-			},
-			"envId": {
-				"description": "Environment identifier",
-				"type": "string",
-				"minLength": 1
-			},
-			"bulkUpdateFlagSpecificTargetsSchema": {
-				"description": "Update the explicit value of multiple flags for a given audience",
-				"type": "object",
-				"properties": {
-					"updates": {
-						"description": "The list of updates to make to the flags' targeting",
-						"minItems": 1,
-						"type": "array",
-						"items": {
-							"$ref": "#/components/schemas/updateFlagSpecificTargets"
-						}
-					},
-					"notifications": {
-						"description": "Whether to send notifications about the change to configured integration (eg. Slack, Linear, etc). Defaults to true.",
-						"default": true,
-						"type": "boolean"
-					},
-					"changeDescription": {
-						"description": "The description of the change recorded in the change history",
-						"type": "string"
-					}
-				},
-				"required": [
-					"updates"
-				]
-			},
-			"updateFlagSpecificTargets": {
-				"description": "Update the explicit value of the flag for a given audience (null means to remove the flag from the audience).",
-				"type": "object",
-				"properties": {
-					"flagKey": {
-						"$ref": "#/components/schemas/flagKey"
-					},
-					"value": {
-						"description": "The value of the flag for the given audience (null means to remove the flag from the audience).",
-						"anyOf": [
-							{
-								"type": "string",
-								"const": "true"
-							},
-							{
-								"type": "boolean",
-								"const": true
-							},
-							{
-								"type": "null"
-							}
-						]
-					},
-					"companyId": {
-						"$ref": "#/components/schemas/companyId"
-					},
-					"userId": {
-						"$ref": "#/components/schemas/userId"
-					}
-				},
-				"required": [
-					"flagKey",
-					"value"
-				]
-			},
-			"companyId": {
-				"description": "Company ID within your application",
-				"type": "string",
-				"minLength": 1
-			},
-			"userId": {
-				"description": "User ID within your application",
-				"type": "string",
-				"minLength": 1
-			},
-			"appHeader": {
-				"description": "Basic app information",
-				"type": "object",
-				"properties": {
-					"id": {
-						"$ref": "#/components/schemas/appId"
-					},
-					"name": {
-						"description": "App name",
-						"type": "string"
-					},
-					"demo": {
-						"description": "Whether the app is a demo app",
-						"type": "boolean"
-					},
-					"environments": {
-						"description": "App environments",
-						"type": "array",
-						"items": {
-							"$ref": "#/components/schemas/environmentHeader"
-						}
-					}
-				},
-				"required": [
-					"id",
-					"name",
-					"demo",
-					"environments"
-				],
-				"additionalProperties": false
-			},
-			"environmentHeader": {
-				"description": "Basic environment information",
-				"type": "object",
-				"properties": {
-					"id": {
-						"$ref": "#/components/schemas/envId"
-					},
-					"name": {
-						"description": "Environment name",
-						"type": "string"
-					},
-					"isProduction": {
-						"description": "Whether the environment is a production environment",
-						"type": "boolean"
-					},
-					"order": {
-						"description": "Environment order in the app (zero-indexed)",
-						"type": "number"
-					}
-				},
-				"required": [
-					"id",
-					"name",
-					"isProduction",
-					"order"
-				],
-				"additionalProperties": false
-			},
-			"ErrorResponse": {
-				"description": "The error response, including individual issues, if applicable",
-				"type": "object",
-				"properties": {
-					"error": {
-						"description": "The error",
-						"type": "object",
-						"properties": {
-							"code": {
-								"description": "Error code",
-								"type": "string",
-								"enum": [
-									"invalid_request",
-									"not_found",
-									"not_possible",
-									"not_allowed",
-									"not_available",
-									"unknown_error",
-									"unauthorized",
-									"unauthenticated"
-								]
-							},
-							"message": {
-								"description": "Human readable error message",
-								"type": "string"
-							}
-						},
-						"required": [
-							"code",
-							"message"
-						],
-						"additionalProperties": false
-					},
-					"issues": {
-						"description": "Individual validation issues, if applicable",
-						"type": "object",
-						"propertyNames": {
-							"description": "The field that has the issue (uses dot notation). Empty string if the issue is at the root.",
-							"type": "string"
-						},
-						"additionalProperties": {
-							"description": "Error messages for this field",
-							"type": "array",
-							"items": {
-								"description": "The error message",
-								"type": "string"
-							}
-						}
-					}
-				},
-				"required": [
-					"error"
-				],
-				"additionalProperties": false
-			},
-			"appHeaderCollection": {
-				"description": "Collection of basic app information",
-				"type": "object",
-				"properties": {
-					"data": {
-						"description": "Collection of apps",
-						"type": "array",
-						"items": {
-							"$ref": "#/components/schemas/appHeader"
-						}
-					}
-				},
-				"required": [
-					"data"
-				],
-				"additionalProperties": false
-			},
-			"flagHeaderCollection": {
-				"description": "Collection response containing flags",
-				"type": "object",
-				"properties": {
-					"data": {
-						"description": "Collection of flags",
-						"type": "array",
-						"items": {
-							"$ref": "#/components/schemas/flagHeader"
-						}
-					}
-				},
-				"required": [
-					"data"
-				],
-				"additionalProperties": false
-			},
-			"flagHeader": {
-				"description": "Basic flag information",
-				"type": "object",
-				"properties": {
-					"key": {
-						"$ref": "#/components/schemas/flagKey"
-					},
-					"name": {
-						"description": "Flag name",
-						"type": "string",
-						"minLength": 1,
-						"maxLength": 255
-					},
-					"description": {
-						"description": "Flag description",
-						"type": "string"
-					},
-					"permanent": {
-						"description": "Whether the flag is permanent",
-						"type": "boolean"
-					},
-					"archived": {
-						"description": "Whether the flag is archived",
-						"type": "boolean"
-					}
-				},
-				"required": [
-					"key",
-					"name",
-					"permanent",
-					"archived"
-				],
-				"additionalProperties": false
-			},
-			"flagTargeting": {
-				"description": "Flag targeting information and its audience",
-				"type": "object",
-				"properties": {
-					"flagKey": {
-						"$ref": "#/components/schemas/flagKey"
-					},
-					"version": {
-						"$ref": "#/components/schemas/flagVersion"
-					},
-					"updatedAt": {
-						"description": "Last time the targeting was updated",
-						"type": "string",
-						"format": "date-time",
-						"pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$"
-					},
-					"specificTargets": {
-						"description": "The flag targeting for each value",
-						"type": "object",
-						"propertyNames": {
-							"$ref": "#/components/schemas/flagValue"
-						},
-						"additionalProperties": {
-							"$ref": "#/components/schemas/flagValueTargeting"
-						}
-					}
-				},
-				"required": [
-					"flagKey",
-					"version",
-					"updatedAt",
-					"specificTargets"
-				],
-				"additionalProperties": false
-			},
-			"flagVersion": {
-				"description": "Flag targeting version",
-				"type": "integer",
-				"minimum": -9007199254740991,
-				"maximum": 9007199254740991
-			},
-			"flagValue": {
-				"description": "The value of the flag served to the audience.",
-				"type": "string",
-				"const": "true"
-			},
-			"flagValueTargeting": {
-				"description": "Flag targeting value and its audience",
-				"type": "object",
-				"properties": {
-					"companyIds": {
-						"description": "Companies that were explicitly given the value",
-						"type": "array",
-						"items": {
-							"$ref": "#/components/schemas/companyId"
-						}
-					},
-					"userIds": {
-						"description": "Users that were explicitly given the value",
-						"type": "array",
-						"items": {
-							"$ref": "#/components/schemas/userId"
-						}
-					}
-				},
-				"required": [
-					"companyIds",
-					"userIds"
-				],
-				"additionalProperties": false
-			},
-			"flagTargetingCollection": {
-				"description": "Collection response containing flags' targeting information",
-				"type": "object",
-				"properties": {
-					"data": {
-						"description": "Collection of flags' targeting information",
-						"type": "array",
-						"items": {
-							"$ref": "#/components/schemas/flagTargeting"
-						}
-					}
-				},
-				"required": [
-					"data"
-				],
-				"additionalProperties": false
-			}
-		},
-		"securitySchemes": {
-			"APIKey": {
-				"name": "Service Authentication",
-				"type": "apiKey",
-				"scheme": "bearer",
-				"description": "API key authentication, for services"
-			}
-		}
-	}
+  "openapi": "3.1.0",
+  "info": {
+    "title": "Reflag API",
+    "version": "1.0.0",
+    "description": "Feature flag management API",
+    "contact": {
+      "name": "Reflag Support",
+      "url": "https://reflag.com/support"
+    },
+    "license": {
+      "name": "Proprietary",
+      "url": "https://reflag.com/"
+    }
+  },
+  "servers": [
+    {
+      "url": "https://app.reflag.com/api",
+      "description": "Production server"
+    }
+  ],
+  "security": [
+    {
+      "APIKey": []
+    }
+  ],
+  "paths": {
+    "/apps/{appId}": {
+      "get": {
+        "summary": "Get details of an application",
+        "description": "Retrieve a specific application by its identifier",
+        "operationId": "getApp",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "appId",
+            "schema": {
+              "$ref": "#/components/schemas/appId"
+            },
+            "required": true,
+            "description": "App identifier"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Requested resource retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/appHeader"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Requested resource, or its parent, not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/apps": {
+      "get": {
+        "summary": "List of applications",
+        "description": "Retrieve all applications for a specific organization",
+        "operationId": "listOrgApps",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "orgId",
+            "schema": {
+              "$ref": "#/components/schemas/orgId"
+            },
+            "required": true,
+            "description": "Organization identifier"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Requested resource retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/appHeaderCollection"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Requested resource, or its parent, not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/apps/{appId}/flags": {
+      "get": {
+        "summary": "List flags for application",
+        "description": "Retrieve all flags for a specific application",
+        "operationId": "listAppFlags",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "appId",
+            "schema": {
+              "$ref": "#/components/schemas/appId"
+            },
+            "required": true,
+            "description": "App identifier"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Requested resource retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/flagHeaderCollection"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Requested resource, or its parent, not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/apps/{appId}/flags/{flagKey}/targeting/{envId}": {
+      "get": {
+        "summary": "Get flag targeting for an environment",
+        "description": "Retrieve targeting for a flag in an environment",
+        "operationId": "getFlagTargeting",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "appId",
+            "schema": {
+              "$ref": "#/components/schemas/appId"
+            },
+            "required": true,
+            "description": "App identifier"
+          },
+          {
+            "in": "path",
+            "name": "flagKey",
+            "schema": {
+              "$ref": "#/components/schemas/flagKey"
+            },
+            "required": true,
+            "description": "Unique flag key"
+          },
+          {
+            "in": "path",
+            "name": "envId",
+            "schema": {
+              "$ref": "#/components/schemas/envId"
+            },
+            "required": true,
+            "description": "Environment identifier"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Requested resource retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/flagTargeting"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Requested resource, or its parent, not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/apps/{appId}/flags/specific-targets/{envId}": {
+      "patch": {
+        "summary": "Update flag specific targets for an environment",
+        "description": "Update specific companies and users for flags in an environment",
+        "operationId": "updateBulkFlagSpecificTargets",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "appId",
+            "schema": {
+              "$ref": "#/components/schemas/appId"
+            },
+            "required": true,
+            "description": "App identifier"
+          },
+          {
+            "in": "path",
+            "name": "envId",
+            "schema": {
+              "$ref": "#/components/schemas/envId"
+            },
+            "required": true,
+            "description": "Environment identifier"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/bulkUpdateFlagSpecificTargetsSchema"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Requested resource retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/flagTargetingCollection"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Requested resource, or its parent, not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "appId": {
+        "description": "App identifier",
+        "type": "string",
+        "minLength": 1
+      },
+      "orgId": {
+        "description": "Organization identifier",
+        "type": "string",
+        "minLength": 1
+      },
+      "flagKey": {
+        "description": "Unique flag key",
+        "type": "string",
+        "minLength": 1
+      },
+      "envId": {
+        "description": "Environment identifier",
+        "type": "string",
+        "minLength": 1
+      },
+      "bulkUpdateFlagSpecificTargetsSchema": {
+        "description": "Update the explicit value of multiple flags for a given audience",
+        "type": "object",
+        "properties": {
+          "updates": {
+            "description": "The list of updates to make to the flags' targeting",
+            "minItems": 1,
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/updateFlagSpecificTargets"
+            }
+          },
+          "notifications": {
+            "description": "Whether to send notifications about the change to configured integration (eg. Slack, Linear, etc). Defaults to true.",
+            "default": true,
+            "type": "boolean"
+          },
+          "changeDescription": {
+            "description": "The description of the change recorded in the change history",
+            "type": "string"
+          }
+        },
+        "required": [
+          "updates"
+        ]
+      },
+      "updateFlagSpecificTargets": {
+        "description": "Update the explicit value of the flag for a given audience (null means to remove the flag from the audience).",
+        "type": "object",
+        "properties": {
+          "flagKey": {
+            "$ref": "#/components/schemas/flagKey"
+          },
+          "value": {
+            "description": "The value of the flag for the given audience (null means to remove the flag from the audience).",
+            "anyOf": [
+              {
+                "type": "string",
+                "const": "true"
+              },
+              {
+                "type": "boolean",
+                "const": true
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "companyId": {
+            "$ref": "#/components/schemas/companyId"
+          },
+          "userId": {
+            "$ref": "#/components/schemas/userId"
+          }
+        },
+        "required": [
+          "flagKey",
+          "value"
+        ]
+      },
+      "companyId": {
+        "description": "Company ID within your application",
+        "type": "string",
+        "minLength": 1
+      },
+      "userId": {
+        "description": "User ID within your application",
+        "type": "string",
+        "minLength": 1
+      },
+      "appHeader": {
+        "description": "Basic app information",
+        "type": "object",
+        "properties": {
+          "id": {
+            "$ref": "#/components/schemas/appId"
+          },
+          "name": {
+            "description": "App name",
+            "type": "string"
+          },
+          "demo": {
+            "description": "Whether the app is a demo app",
+            "type": "boolean"
+          },
+          "environments": {
+            "description": "App environments",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/environmentHeader"
+            }
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "demo",
+          "environments"
+        ],
+        "additionalProperties": false
+      },
+      "environmentHeader": {
+        "description": "Basic environment information",
+        "type": "object",
+        "properties": {
+          "id": {
+            "$ref": "#/components/schemas/envId"
+          },
+          "name": {
+            "description": "Environment name",
+            "type": "string"
+          },
+          "isProduction": {
+            "description": "Whether the environment is a production environment",
+            "type": "boolean"
+          },
+          "order": {
+            "description": "Environment order in the app (zero-indexed)",
+            "type": "number"
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "isProduction",
+          "order"
+        ],
+        "additionalProperties": false
+      },
+      "ErrorResponse": {
+        "description": "The error response, including individual issues, if applicable",
+        "type": "object",
+        "properties": {
+          "error": {
+            "description": "The error",
+            "type": "object",
+            "properties": {
+              "code": {
+                "description": "Error code",
+                "type": "string",
+                "enum": [
+                  "invalid_request",
+                  "not_found",
+                  "not_possible",
+                  "not_allowed",
+                  "not_available",
+                  "unknown_error",
+                  "unauthorized",
+                  "unauthenticated"
+                ]
+              },
+              "message": {
+                "description": "Human readable error message",
+                "type": "string"
+              }
+            },
+            "required": [
+              "code",
+              "message"
+            ],
+            "additionalProperties": false
+          },
+          "issues": {
+            "description": "Individual validation issues, if applicable",
+            "type": "object",
+            "propertyNames": {
+              "description": "The field that has the issue (uses dot notation). Empty string if the issue is at the root.",
+              "type": "string"
+            },
+            "additionalProperties": {
+              "description": "Error messages for this field",
+              "type": "array",
+              "items": {
+                "description": "The error message",
+                "type": "string"
+              }
+            }
+          }
+        },
+        "required": [
+          "error"
+        ],
+        "additionalProperties": false
+      },
+      "appHeaderCollection": {
+        "description": "Collection of basic app information",
+        "type": "object",
+        "properties": {
+          "data": {
+            "description": "Collection of apps",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/appHeader"
+            }
+          }
+        },
+        "required": [
+          "data"
+        ],
+        "additionalProperties": false
+      },
+      "flagHeaderCollection": {
+        "description": "Collection response containing flags",
+        "type": "object",
+        "properties": {
+          "data": {
+            "description": "Collection of flags",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/flagHeader"
+            }
+          }
+        },
+        "required": [
+          "data"
+        ],
+        "additionalProperties": false
+      },
+      "flagHeader": {
+        "description": "Basic flag information",
+        "type": "object",
+        "properties": {
+          "key": {
+            "$ref": "#/components/schemas/flagKey"
+          },
+          "name": {
+            "description": "Flag name",
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 255
+          },
+          "description": {
+            "description": "Flag description",
+            "type": "string"
+          },
+          "permanent": {
+            "description": "Whether the flag is permanent",
+            "type": "boolean"
+          },
+          "archived": {
+            "description": "Whether the flag is archived",
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "key",
+          "name",
+          "permanent",
+          "archived"
+        ],
+        "additionalProperties": false
+      },
+      "flagTargeting": {
+        "description": "Flag targeting information and its audience",
+        "type": "object",
+        "properties": {
+          "flagKey": {
+            "$ref": "#/components/schemas/flagKey"
+          },
+          "version": {
+            "$ref": "#/components/schemas/flagVersion"
+          },
+          "updatedAt": {
+            "description": "Last time the targeting was updated",
+            "type": "string",
+            "format": "date-time",
+            "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$"
+          },
+          "specificTargets": {
+            "description": "The flag targeting for each value",
+            "type": "object",
+            "propertyNames": {
+              "$ref": "#/components/schemas/flagValue"
+            },
+            "additionalProperties": {
+              "$ref": "#/components/schemas/flagValueTargeting"
+            }
+          }
+        },
+        "required": [
+          "flagKey",
+          "version",
+          "updatedAt",
+          "specificTargets"
+        ],
+        "additionalProperties": false
+      },
+      "flagVersion": {
+        "description": "Flag targeting version",
+        "type": "integer",
+        "minimum": -9007199254740991,
+        "maximum": 9007199254740991
+      },
+      "flagValue": {
+        "description": "The value of the flag served to the audience.",
+        "type": "string",
+        "const": "true"
+      },
+      "flagValueTargeting": {
+        "description": "Flag targeting value and its audience",
+        "type": "object",
+        "properties": {
+          "companyIds": {
+            "description": "Companies that were explicitly given the value",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/companyId"
+            }
+          },
+          "userIds": {
+            "description": "Users that were explicitly given the value",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/userId"
+            }
+          }
+        },
+        "required": [
+          "companyIds",
+          "userIds"
+        ],
+        "additionalProperties": false
+      },
+      "flagTargetingCollection": {
+        "description": "Collection response containing flags' targeting information",
+        "type": "object",
+        "properties": {
+          "data": {
+            "description": "Collection of flags' targeting information",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/flagTargeting"
+            }
+          }
+        },
+        "required": [
+          "data"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "securitySchemes": {
+      "APIKey": {
+        "name": "Service Authentication",
+        "type": "apiKey",
+        "scheme": "bearer",
+        "description": "API key authentication, for services"
+      }
+    }
+  }
 }
