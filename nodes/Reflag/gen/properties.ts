@@ -42,10 +42,10 @@ export const properties: INodeProperties[] = [
         }
       },
       {
-        "name": "List Org Apps",
-        "value": "List Org Apps",
+        "name": "List Apps",
+        "value": "List Apps",
         "action": "List of applications",
-        "description": "Retrieve all applications for a specific organization",
+        "description": "Retrieve all accessible applications",
         "routing": {
           "request": {
             "method": "GET",
@@ -143,7 +143,7 @@ export const properties: INodeProperties[] = [
           "Default"
         ],
         "operation": [
-          "List Org Apps"
+          "List Apps"
         ]
       }
     }
@@ -151,7 +151,6 @@ export const properties: INodeProperties[] = [
   {
     "displayName": "Org Id",
     "name": "orgId",
-    "required": true,
     "description": "Organization identifier",
     "default": "",
     "type": "string",
@@ -169,7 +168,7 @@ export const properties: INodeProperties[] = [
           "Default"
         ],
         "operation": [
-          "List Org Apps"
+          "List Apps"
         ]
       }
     }

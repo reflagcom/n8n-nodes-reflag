@@ -2,7 +2,7 @@
   "openapi": "3.1.0",
   "info": {
     "title": "Reflag API",
-    "version": "1.0.0",
+    "version": "1.1.0",
     "description": "Feature flag management API",
     "contact": {
       "name": "Reflag Support",
@@ -98,17 +98,15 @@
     "/apps": {
       "get": {
         "summary": "List of applications",
-        "description": "Retrieve all applications for a specific organization",
-        "operationId": "listOrgApps",
+        "description": "Retrieve all accessible applications",
+        "operationId": "listApps",
         "parameters": [
           {
             "in": "query",
             "name": "orgId",
             "schema": {
               "$ref": "#/components/schemas/orgId"
-            },
-            "required": true,
-            "description": "Organization identifier"
+            }
           }
         ],
         "responses": {
@@ -509,6 +507,9 @@
         "description": "Basic app information",
         "type": "object",
         "properties": {
+          "org": {
+            "$ref": "#/components/schemas/orgHeader"
+          },
           "id": {
             "$ref": "#/components/schemas/appId"
           },
@@ -520,6 +521,9 @@
             "description": "Whether the app is a demo app",
             "type": "boolean"
           },
+          "flagKeyFormat": {
+            "$ref": "#/components/schemas/flagKeyFormat"
+          },
           "environments": {
             "description": "App environments",
             "type": "array",
@@ -529,12 +533,45 @@
           }
         },
         "required": [
+          "org",
           "id",
           "name",
           "demo",
+          "flagKeyFormat",
           "environments"
         ],
         "additionalProperties": false
+      },
+      "orgHeader": {
+        "description": "Basic organization information",
+        "type": "object",
+        "properties": {
+          "id": {
+            "$ref": "#/components/schemas/orgId"
+          },
+          "name": {
+            "description": "Organization name",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "name"
+        ],
+        "additionalProperties": false
+      },
+      "flagKeyFormat": {
+        "description": "The enforced key format when creating flags",
+        "type": "string",
+        "enum": [
+          "custom",
+          "pascalCase",
+          "camelCase",
+          "snakeCaseUpper",
+          "snakeCaseLower",
+          "kebabCaseUpper",
+          "kebabCaseLower"
+        ]
       },
       "environmentHeader": {
         "description": "Basic environment information",
@@ -778,10 +815,9 @@
     },
     "securitySchemes": {
       "APIKey": {
-        "name": "Service Authentication",
-        "type": "apiKey",
+        "type": "http",
         "scheme": "bearer",
-        "description": "API key authentication, for services"
+        "description": "API key authentication, for service access"
       }
     }
   }
