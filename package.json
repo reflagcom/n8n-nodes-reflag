@@ -1,64 +1,64 @@
 {
-	"name": "@reflag/n8n-nodes-reflag",
-	"version": "1.0.1-rc.2",
-	"description": "n8n nodes for the Reflag service used in automation",
-	"keywords": [
-		"n8n-community-node-package"
-	],
-	"license": "MIT",
-	"homepage": "https://reflag.com",
-	"author": {
-		"name": "Reflag",
-		"email": "hello@reflag.com"
-	},
-	"repository": {
-		"type": "git",
-		"url": "git+https://github.com/reflagcom/n8n-nodes-reflag.git"
-	},
-	"packageManager": "yarn@4.10.3",
-	"publishConfig": {
-		"access": "public",
-		"registry": "https://registry.npmjs.org",
-		"scope": "reflag"
-	},
-	"engines": {
-		"node": ">=20.15"
-	},
-	"main": "index.js",
-	"scripts": {
-		"sync": "node sync.mjs",
-		"build": "npx rimraf dist && tsc && gulp build:icons",
-		"dev": "tsc --watch",
-		"lint": "eslint .",
-		"lint:ci": "eslint --output-file eslint_report.json --format json .",
-		"prettier": "prettier --check .",
-		"format": "yarn lint --fix && yarn prettier --write"
-	},
-	"files": [
-		"dist"
-	],
-	"n8n": {
-		"n8nNodesApiVersion": 1,
-		"credentials": [
-			"dist/credentials/ReflagApi/ReflagApi.credentials.js"
-		],
-		"nodes": [
-			"dist/nodes/Reflag/Reflag.node.js"
-		]
-	},
-	"peerDependencies": {
-		"n8n-workflow": "*"
-	},
-	"devDependencies": {
-		"@devlikeapro/n8n-openapi-node": "^0.1.4",
-		"@typescript-eslint/parser": "~8.46.1",
-		"chalk": "^5.6.2",
-		"compare-versions": "^6.1.1",
-		"eslint": "^8.57.1",
-		"eslint-plugin-n8n-nodes-base": "^1.16.4",
-		"gulp": "^5.0.1",
-		"n8n-workflow": "^1.113.0",
-		"prettier": "^3.6.2",
-		"typescript": "^5.9.3"
-	}
+  "name": "@reflag/n8n-nodes-reflag",
+  "version": "1.1.0",
+  "description": "n8n nodes for the Reflag service used in automation",
+  "keywords": [
+    "n8n-community-node-package"
+  ],
+  "license": "MIT",
+  "homepage": "https://reflag.com",
+  "author": {
+    "name": "Reflag",
+    "email": "hello@reflag.com"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/reflagcom/n8n-nodes-reflag.git"
+  },
+  "packageManager": "yarn@4.10.3",
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org",
+    "scope": "reflag"
+  },
+  "engines": {
+    "node": ">=20.15"
+  },
+  "main": "index.js",
+  "scripts": {
+    "sync": "node sync.mjs",
+    "build": "npx rimraf dist && tsc && gulp build:icons",
+    "dev": "tsc --watch",
+    "lint": "eslint .",
+    "lint:ci": "eslint --output-file eslint_report.json --format json .",
+    "prettier": "prettier --check .",
+    "format": "yarn lint --fix && yarn prettier --write"
+  },
+  "files": [
+    "dist"
+  ],
+  "n8n": {
+    "n8nNodesApiVersion": 1,
+    "credentials": [
+      "dist/credentials/ReflagApi/ReflagApi.credentials.js"
+    ],
+    "nodes": [
+      "dist/nodes/Reflag/Reflag.node.js"
+    ]
+  },
+  "peerDependencies": {
+    "n8n-workflow": "*"
+  },
+  "devDependencies": {
+    "@devlikeapro/n8n-openapi-node": "^0.1.4",
+    "@typescript-eslint/parser": "~8.46.1",
+    "chalk": "^5.6.2",
+    "compare-versions": "^6.1.1",
+    "eslint": "^8.57.1",
+    "eslint-plugin-n8n-nodes-base": "^1.16.4",
+    "gulp": "^5.0.1",
+    "n8n-workflow": "^1.113.0",
+    "prettier": "^3.6.2",
+    "typescript": "^5.9.3"
+  }
 }

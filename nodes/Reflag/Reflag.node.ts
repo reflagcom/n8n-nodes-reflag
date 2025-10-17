@@ -6,36 +6,36 @@ const version = packageJson.version;
 const majorVersion = parseInt(version.split('.')[0]);
 
 export class Reflag implements INodeType {
-	description: INodeTypeDescription = {
-		name: 'reflag',
-		displayName: 'Reflag',
-		icon: {
-			light: 'file:reflag-light.svg',
-			dark: 'file:reflag-dark.svg',
-		},
-		group: ['transform'],
-		version: majorVersion,
-		subtitle: '={{$parameter["operation"] + ": " + $parameter["resource"]}}',
-		description: 'Automate your feature flagging through the Reflag API',
-		defaults: {
-			name: 'Reflag',
-		},
-		inputs: ['main'],
-		outputs: ['main'],
-		credentials: [
-			{
-				name: 'ReflagApi',
-				required: true,
-			},
-		],
-		requestDefaults: {
-			headers: {
-				Accept: 'application/json',
-				'Content-Type': 'application/json',
-				'reflag-sdk-version': `n8n/${version}`,
-			},
-			baseURL: '={{$credentials.url}}',
-		},
-		properties,
-	};
+  description: INodeTypeDescription = {
+    name: 'reflag',
+    displayName: 'Reflag',
+    icon: {
+      light: 'file:reflag-light.svg',
+      dark: 'file:reflag-dark.svg',
+    },
+    group: ['transform'],
+    version: majorVersion,
+    subtitle: '={{$parameter["operation"] + ": " + $parameter["resource"]}}',
+    description: 'Automate your feature flagging through the Reflag API',
+    defaults: {
+      name: 'Reflag',
+    },
+    inputs: ['main'],
+    outputs: ['main'],
+    credentials: [
+      {
+        name: 'ReflagApi',
+        required: true,
+      },
+    ],
+    requestDefaults: {
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+        'reflag-sdk-version': `n8n/${version}`,
+      },
+      baseURL: '={{$credentials.url}}',
+    },
+    properties,
+  };
 }
