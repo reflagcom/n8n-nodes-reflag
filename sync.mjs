@@ -34,11 +34,11 @@ export default async function sync(force = false) {
           },
           null,
           2,
-        ),
+        ) + '\n',
       );
 
       console.log(chalk.green('Writing OpenAPI spec to gen/openapi.json'));
-      await writeFile(path.join(GEN_PATH, 'openapi.json'), JSON.stringify(spec, null, 2));
+      await writeFile(path.join(GEN_PATH, 'openapi.json'), JSON.stringify(spec, null, 2) + '\n');
 
       console.log(chalk.green('Generating properties from OpenAPI spec to gen/properties.ts'));
       const parser = new N8NPropertiesBuilder(spec, {});
@@ -50,6 +50,7 @@ export default async function sync(force = false) {
           "import { INodeProperties } from 'n8n-workflow';",
           '',
           `export const properties: INodeProperties[] = ${JSON.stringify(properties, null, 2)};`,
+          '',
         ].join('\n'),
       );
     } else {

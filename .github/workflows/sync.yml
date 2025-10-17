@@ -3,7 +3,7 @@ name: Sync OpenAPI spec
 permissions:
   statuses: write
   checks: write
-  contents: read
+  contents: write
   pull-requests: write
 
 on:
