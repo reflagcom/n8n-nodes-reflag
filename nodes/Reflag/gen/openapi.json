@@ -2,7 +2,7 @@
   "openapi": "3.1.0",
   "info": {
     "title": "Reflag API",
-    "version": "1.1.0",
+    "version": "1.2.0",
     "description": "Feature flag management API",
     "contact": {
       "name": "Reflag Support",
@@ -543,7 +543,7 @@
         "additionalProperties": false
       },
       "orgHeader": {
-        "description": "Basic organization information",
+        "description": "Organization's basic information",
         "type": "object",
         "properties": {
           "id": {
@@ -551,7 +551,8 @@
           },
           "name": {
             "description": "Organization name",
-            "type": "string"
+            "type": "string",
+            "minLength": 1
           }
         },
         "required": [
@@ -714,6 +715,12 @@
           "archived": {
             "description": "Whether the flag is archived",
             "type": "boolean"
+          },
+          "stage": {
+            "$ref": "#/components/schemas/stageHeader"
+          },
+          "owner": {
+            "$ref": "#/components/schemas/reflagUserHeader"
           }
         },
         "required": [
@@ -723,6 +730,76 @@
           "archived"
         ],
         "additionalProperties": false
+      },
+      "stageHeader": {
+        "description": "Stage's basic information",
+        "type": "object",
+        "properties": {
+          "id": {
+            "$ref": "#/components/schemas/stageId"
+          },
+          "name": {
+            "description": "Stage name",
+            "type": "string",
+            "minLength": 1
+          },
+          "color": {
+            "description": "Stage color (HTML color name or hex code)",
+            "type": "string"
+          },
+          "order": {
+            "description": "Stage order",
+            "type": "number"
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "color",
+          "order"
+        ],
+        "additionalProperties": false
+      },
+      "stageId": {
+        "description": "Stage identifier",
+        "type": "string",
+        "minLength": 1
+      },
+      "reflagUserHeader": {
+        "description": "Reflag user's basic information",
+        "type": "object",
+        "properties": {
+          "id": {
+            "$ref": "#/components/schemas/reflagUserId"
+          },
+          "name": {
+            "description": "User's name",
+            "type": "string",
+            "minLength": 1
+          },
+          "email": {
+            "description": "User's email",
+            "type": "string",
+            "format": "email",
+            "pattern": "^(?!\\.)(?!.*\\.\\.)([A-Za-z0-9_'+\\-\\.]*)[A-Za-z0-9_+-]@([A-Za-z0-9][A-Za-z0-9\\-]*\\.)+[A-Za-z]{2,}$"
+          },
+          "avatarUrl": {
+            "description": "User's avatar URL",
+            "type": "string",
+            "format": "uri"
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "email"
+        ],
+        "additionalProperties": false
+      },
+      "reflagUserId": {
+        "description": "Reflag user identifier",
+        "type": "string",
+        "minLength": 1
       },
       "flagTargeting": {
         "description": "Flag targeting information and its audience",

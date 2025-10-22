@@ -1,6 +1,6 @@
 {
   "name": "@reflag/n8n-nodes-reflag",
-  "version": "1.1.1-rc.1",
+  "version": "1.2.0",
   "description": "n8n nodes for the Reflag service used in automation",
   "keywords": [
     "n8n-community-node-package"
