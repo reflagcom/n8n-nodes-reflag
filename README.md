@@ -21,13 +21,20 @@ To use the Reflag node, you need to authenticate with your Reflag account using 
 
 ### Prerequisites
 
-1. Sign up for a Reflag account at [https://apps.reflag.com](https://apps.reflag.com)
-2. Generate an API key from your application settings
+1. Sign up for a Reflag account at [https://app.reflag.com/signup](https://app.reflag.com/signup)
+2. Generate an API key from your [application settings](https://app.reflag.com/env-current/settings/org-api-access)
 
 ### Setup
 
 1. In the Reflag node credentials, enter your API key
 2. The default URL is set to `https://app.reflag.com/api` (you can change this if using a custom instance)
+
+Some operations require additional details:
+
+- App ID is available in settings under [General for the App](https://app.reflag.com/env-current/settings/app-general)
+- Flag keys are listed in the Key column on the [Flags page](https://app.reflag.com/env-current/flags)
+- Org ID you can get from the results of a Get App operation
+- Env ID you can get from the results of a List Apps operation
 
 ## Compatibility
 
