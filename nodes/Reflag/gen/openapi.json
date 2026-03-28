@@ -1,9 +1,9 @@
 {
   "openapi": "3.1.0",
   "info": {
-    "title": "Reflag API",
-    "version": "1.2.0",
-    "description": "Feature flag management API",
+    "title": "Reflag Management API",
+    "version": "3.0.1",
+    "description": "Feature flag Management API",
     "contact": {
       "name": "Reflag Support",
       "url": "https://reflag.com/support"
@@ -47,7 +47,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/appHeader"
+                  "$ref": "#/components/schemas/app"
                 }
               }
             }
@@ -163,11 +163,176 @@
         }
       }
     },
+    "/apps/{appId}/environments": {
+      "get": {
+        "summary": "List environments for application",
+        "description": "Retrieve all environments for a specific application",
+        "operationId": "listEnvironments",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "appId",
+            "schema": {
+              "$ref": "#/components/schemas/appId"
+            },
+            "required": true,
+            "description": "App identifier"
+          },
+          {
+            "in": "query",
+            "name": "sortOrder",
+            "schema": {
+              "$ref": "#/components/schemas/sortOrder"
+            },
+            "description": "Sort order applied to the sorting column"
+          },
+          {
+            "in": "query",
+            "name": "sortBy",
+            "schema": {
+              "$ref": "#/components/schemas/environmentHeaderSortByColumn"
+            },
+            "description": "The column to sort by"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Requested resource retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/environmentHeaderCollection"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Requested resource, or its parent, not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/apps/{appId}/environments/{envId}": {
+      "get": {
+        "summary": "Get environment details",
+        "description": "Retrieve details for a specific environment",
+        "operationId": "getEnvironment",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "appId",
+            "schema": {
+              "$ref": "#/components/schemas/appId"
+            },
+            "required": true,
+            "description": "App identifier"
+          },
+          {
+            "in": "path",
+            "name": "envId",
+            "schema": {
+              "$ref": "#/components/schemas/envId"
+            },
+            "required": true,
+            "description": "Environment identifier"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Requested resource retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/environment"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Requested resource, or its parent, not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/apps/{appId}/flags": {
       "get": {
         "summary": "List flags for application",
         "description": "Retrieve all flags for a specific application",
-        "operationId": "listAppFlags",
+        "operationId": "listFlags",
         "parameters": [
           {
             "in": "path",
@@ -186,6 +351,454 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/flagHeaderCollection"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Requested resource, or its parent, not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "summary": "Create a flag",
+        "description": "Create a new flag in the application. Returns the created flag details.",
+        "operationId": "createFlag",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "appId",
+            "schema": {
+              "$ref": "#/components/schemas/appId"
+            },
+            "required": true,
+            "description": "App identifier"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "key": {
+                    "description": "Key of the flag",
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "name": {
+                    "description": "Name of the flag",
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "description": {
+                    "description": "Description of the flag",
+                    "anyOf": [
+                      {
+                        "type": "string",
+                        "maxLength": 8192
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "stageId": {
+                    "description": "Stage ID of the flag",
+                    "type": "string",
+                    "minLength": 14,
+                    "maxLength": 14
+                  },
+                  "ownerUserId": {
+                    "anyOf": [
+                      {
+                        "type": "string"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "permanent": {
+                    "default": false,
+                    "type": "boolean"
+                  },
+                  "secret": {
+                    "description": "Whether the flag is secret",
+                    "type": "boolean"
+                  }
+                },
+                "required": [
+                  "key",
+                  "name"
+                ],
+                "additionalProperties": false
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Requested resource retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "flag": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "$ref": "#/components/schemas/flagId"
+                        },
+                        "key": {
+                          "$ref": "#/components/schemas/flagKey"
+                        },
+                        "name": {
+                          "description": "Flag name",
+                          "type": "string",
+                          "minLength": 1,
+                          "maxLength": 255
+                        },
+                        "description": {
+                          "description": "Flag description",
+                          "type": "string"
+                        },
+                        "stage": {
+                          "$ref": "#/components/schemas/stageHeader"
+                        },
+                        "owner": {
+                          "$ref": "#/components/schemas/reflagUserHeader"
+                        },
+                        "archived": {
+                          "description": "Whether the flag is archived",
+                          "type": "boolean"
+                        },
+                        "stale": {
+                          "description": "Whether the flag is stale",
+                          "type": "boolean"
+                        },
+                        "permanent": {
+                          "description": "Whether the flag is permanent",
+                          "type": "boolean"
+                        },
+                        "createdAt": {
+                          "description": "Timestamp when the flag was created",
+                          "type": "string"
+                        },
+                        "rolledOutToEveryoneAt": {
+                          "description": "Timestamp when the flag was rolled out to everyone",
+                          "type": "string"
+                        },
+                        "codeRefsCleanedUp": {
+                          "description": "Whether code references for this flag have been cleaned up",
+                          "type": "boolean"
+                        },
+                        "codeRefsMarkedCleanUserName": {
+                          "description": "Name of the user who marked code references as cleaned up",
+                          "type": "string"
+                        },
+                        "codeRefsMarkedCleanAt": {
+                          "description": "Timestamp when code references were marked as cleaned up",
+                          "type": "string"
+                        },
+                        "lastCheckAt": {
+                          "description": "Timestamp when the flag was last checked",
+                          "type": "string"
+                        },
+                        "noRecentChecks": {
+                          "description": "Whether the flag has no recent access checks",
+                          "type": "boolean"
+                        },
+                        "lastTrackAt": {
+                          "description": "Timestamp when the flag was last tracked",
+                          "type": "string"
+                        },
+                        "parentFlagId": {
+                          "description": "Parent flag ID",
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "id",
+                        "key",
+                        "name",
+                        "archived",
+                        "stale",
+                        "permanent",
+                        "codeRefsCleanedUp",
+                        "noRecentChecks"
+                      ],
+                      "additionalProperties": false
+                    }
+                  },
+                  "required": [
+                    "flag"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Requested resource, or its parent, not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/apps/{appId}/flags/{flagId}": {
+      "patch": {
+        "summary": "Update a flag",
+        "description": "Update an existing flag",
+        "operationId": "updateFlag",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "appId",
+            "schema": {
+              "$ref": "#/components/schemas/appId"
+            },
+            "required": true,
+            "description": "App identifier"
+          },
+          {
+            "in": "path",
+            "name": "flagId",
+            "schema": {
+              "$ref": "#/components/schemas/flagId"
+            },
+            "required": true,
+            "description": "Flag ID"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "description": "Name of the flag",
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "description": {
+                    "description": "Description of the flag",
+                    "anyOf": [
+                      {
+                        "type": "string",
+                        "maxLength": 8192
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "ownerUserId": {
+                    "anyOf": [
+                      {
+                        "type": "string"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "permanent": {
+                    "type": "boolean"
+                  },
+                  "secret": {
+                    "description": "Whether the flag is secret",
+                    "type": "boolean"
+                  },
+                  "isArchived": {
+                    "type": "boolean"
+                  },
+                  "stageId": {
+                    "description": "Stage ID of the flag",
+                    "type": "string",
+                    "minLength": 14,
+                    "maxLength": 14
+                  }
+                },
+                "additionalProperties": false
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Requested resource retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "flag": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "$ref": "#/components/schemas/flagId"
+                        },
+                        "key": {
+                          "$ref": "#/components/schemas/flagKey"
+                        },
+                        "name": {
+                          "description": "Flag name",
+                          "type": "string",
+                          "minLength": 1,
+                          "maxLength": 255
+                        },
+                        "description": {
+                          "description": "Flag description",
+                          "type": "string"
+                        },
+                        "stage": {
+                          "$ref": "#/components/schemas/stageHeader"
+                        },
+                        "owner": {
+                          "$ref": "#/components/schemas/reflagUserHeader"
+                        },
+                        "archived": {
+                          "description": "Whether the flag is archived",
+                          "type": "boolean"
+                        },
+                        "stale": {
+                          "description": "Whether the flag is stale",
+                          "type": "boolean"
+                        },
+                        "permanent": {
+                          "description": "Whether the flag is permanent",
+                          "type": "boolean"
+                        },
+                        "createdAt": {
+                          "description": "Timestamp when the flag was created",
+                          "type": "string"
+                        },
+                        "rolledOutToEveryoneAt": {
+                          "description": "Timestamp when the flag was rolled out to everyone",
+                          "type": "string"
+                        },
+                        "codeRefsCleanedUp": {
+                          "description": "Whether code references for this flag have been cleaned up",
+                          "type": "boolean"
+                        },
+                        "codeRefsMarkedCleanUserName": {
+                          "description": "Name of the user who marked code references as cleaned up",
+                          "type": "string"
+                        },
+                        "codeRefsMarkedCleanAt": {
+                          "description": "Timestamp when code references were marked as cleaned up",
+                          "type": "string"
+                        },
+                        "lastCheckAt": {
+                          "description": "Timestamp when the flag was last checked",
+                          "type": "string"
+                        },
+                        "noRecentChecks": {
+                          "description": "Whether the flag has no recent access checks",
+                          "type": "boolean"
+                        },
+                        "lastTrackAt": {
+                          "description": "Timestamp when the flag was last tracked",
+                          "type": "string"
+                        },
+                        "parentFlagId": {
+                          "description": "Parent flag ID",
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "id",
+                        "key",
+                        "name",
+                        "archived",
+                        "stale",
+                        "permanent",
+                        "codeRefsCleanedUp",
+                        "noRecentChecks"
+                      ],
+                      "additionalProperties": false
+                    }
+                  },
+                  "required": [
+                    "flag"
+                  ],
+                  "additionalProperties": false
                 }
               }
             }
@@ -321,11 +934,11 @@
         }
       }
     },
-    "/apps/{appId}/flags/specific-targets/{envId}": {
-      "patch": {
-        "summary": "Update flag specific targets for an environment",
-        "description": "Update specific companies and users for flags in an environment",
-        "operationId": "updateBulkFlagSpecificTargets",
+    "/apps/{appId}/envs/{envId}/companies/{companyId}/flags": {
+      "get": {
+        "summary": "Get flags for a company",
+        "description": "Retrieve all flags with their targeting status for a specific company",
+        "operationId": "getCompanyFlags",
         "parameters": [
           {
             "in": "path",
@@ -344,13 +957,108 @@
             },
             "required": true,
             "description": "Environment identifier"
+          },
+          {
+            "in": "path",
+            "name": "companyId",
+            "schema": {
+              "$ref": "#/components/schemas/companyId"
+            },
+            "required": true,
+            "description": "Company ID within your application"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Requested resource retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/entityFlagsResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Requested resource, or its parent, not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "patch": {
+        "summary": "Update flag targeting for a company",
+        "description": "Update specific targeting for flags for a company in an environment",
+        "operationId": "updateCompanyFlags",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "appId",
+            "schema": {
+              "$ref": "#/components/schemas/appId"
+            },
+            "required": true,
+            "description": "App identifier"
+          },
+          {
+            "in": "path",
+            "name": "envId",
+            "schema": {
+              "$ref": "#/components/schemas/envId"
+            },
+            "required": true,
+            "description": "Environment identifier"
+          },
+          {
+            "in": "path",
+            "name": "companyId",
+            "schema": {
+              "$ref": "#/components/schemas/companyId"
+            },
+            "required": true,
+            "description": "Company ID within your application"
           }
         ],
         "requestBody": {
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/bulkUpdateFlagSpecificTargetsSchema"
+                "$ref": "#/components/schemas/updateEntityFlagsBody"
               }
             }
           }
@@ -361,7 +1069,190 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/flagTargetingCollection"
+                  "$ref": "#/components/schemas/entityFlagsResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Requested resource, or its parent, not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/apps/{appId}/envs/{envId}/users/{userId}/flags": {
+      "get": {
+        "summary": "Get flags for a user",
+        "description": "Retrieve all flags with their targeting status for a specific user",
+        "operationId": "getUserFlags",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "appId",
+            "schema": {
+              "$ref": "#/components/schemas/appId"
+            },
+            "required": true,
+            "description": "App identifier"
+          },
+          {
+            "in": "path",
+            "name": "envId",
+            "schema": {
+              "$ref": "#/components/schemas/envId"
+            },
+            "required": true,
+            "description": "Environment identifier"
+          },
+          {
+            "in": "path",
+            "name": "userId",
+            "schema": {
+              "$ref": "#/components/schemas/userId"
+            },
+            "required": true,
+            "description": "User ID within your application"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Requested resource retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/entityFlagsResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Requested resource, or its parent, not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "patch": {
+        "summary": "Update flag targeting for a user",
+        "description": "Update specific targeting for flags for a user in an environment",
+        "operationId": "updateUserFlags",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "appId",
+            "schema": {
+              "$ref": "#/components/schemas/appId"
+            },
+            "required": true,
+            "description": "App identifier"
+          },
+          {
+            "in": "path",
+            "name": "envId",
+            "schema": {
+              "$ref": "#/components/schemas/envId"
+            },
+            "required": true,
+            "description": "Environment identifier"
+          },
+          {
+            "in": "path",
+            "name": "userId",
+            "schema": {
+              "$ref": "#/components/schemas/userId"
+            },
+            "required": true,
+            "description": "User ID within your application"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/updateEntityFlagsBody"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Requested resource retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/entityFlagsResponse"
                 }
               }
             }
@@ -422,56 +1313,86 @@
         "type": "string",
         "minLength": 1
       },
-      "flagKey": {
-        "description": "Unique flag key",
+      "sortOrder": {
+        "description": "Sort order applied to the sorting column",
+        "default": "asc",
         "type": "string",
-        "minLength": 1
+        "enum": [
+          "asc",
+          "desc"
+        ]
+      },
+      "environmentHeaderSortByColumn": {
+        "description": "The column to sort by",
+        "default": "order",
+        "type": "string",
+        "enum": [
+          "name",
+          "order"
+        ]
       },
       "envId": {
         "description": "Environment identifier",
         "type": "string",
         "minLength": 1
       },
-      "bulkUpdateFlagSpecificTargetsSchema": {
-        "description": "Update the explicit value of multiple flags for a given audience",
+      "flagId": {
+        "description": "Flag ID",
+        "type": "string",
+        "minLength": 1
+      },
+      "flagKey": {
+        "description": "Unique flag key",
+        "type": "string",
+        "minLength": 1
+      },
+      "companyId": {
+        "description": "Company ID within your application",
+        "type": "string",
+        "minLength": 1
+      },
+      "updateEntityFlagsBody": {
+        "description": "Request body for updating flags for an entity",
         "type": "object",
         "properties": {
           "updates": {
-            "description": "The list of updates to make to the flags' targeting",
+            "description": "List of flag updates to apply",
             "minItems": 1,
             "type": "array",
             "items": {
-              "$ref": "#/components/schemas/updateFlagSpecificTargets"
+              "$ref": "#/components/schemas/entityFlagUpdate"
             }
           },
-          "notifications": {
-            "description": "Whether to send notifications about the change to configured integration (eg. Slack, Linear, etc). Defaults to true.",
-            "default": true,
-            "type": "boolean"
-          },
           "changeDescription": {
-            "description": "The description of the change recorded in the change history",
+            "description": "Description of the change for audit history",
             "type": "string"
+          },
+          "notifications": {
+            "description": "Destination list for notifications about the change. Use [] to disable notifications. Omit to use configured defaults.",
+            "type": "array",
+            "items": {
+              "type": "string",
+              "enum": [
+                "linearComment",
+                "slack"
+              ]
+            }
           }
         },
         "required": [
           "updates"
         ]
       },
-      "updateFlagSpecificTargets": {
-        "description": "Update the explicit value of the flag for a given audience (null means to remove the flag from the audience).",
+      "entityFlagUpdate": {
+        "description": "Update for a single flag's explicit targeting override",
         "type": "object",
         "properties": {
           "flagKey": {
             "$ref": "#/components/schemas/flagKey"
           },
-          "value": {
-            "description": "The value of the flag for the given audience (null means to remove the flag from the audience).",
+          "specificTargetValue": {
+            "description": "Set to true to add a specific-targeting override, or null to remove it",
             "anyOf": [
-              {
-                "type": "string",
-                "const": "true"
-              },
               {
                 "type": "boolean",
                 "const": true
@@ -480,31 +1401,20 @@
                 "type": "null"
               }
             ]
-          },
-          "companyId": {
-            "$ref": "#/components/schemas/companyId"
-          },
-          "userId": {
-            "$ref": "#/components/schemas/userId"
           }
         },
         "required": [
           "flagKey",
-          "value"
+          "specificTargetValue"
         ]
-      },
-      "companyId": {
-        "description": "Company ID within your application",
-        "type": "string",
-        "minLength": 1
       },
       "userId": {
         "description": "User ID within your application",
         "type": "string",
         "minLength": 1
       },
-      "appHeader": {
-        "description": "Basic app information",
+      "app": {
+        "description": "App information with related collections",
         "type": "object",
         "properties": {
           "org": {
@@ -525,10 +1435,24 @@
             "$ref": "#/components/schemas/flagKeyFormat"
           },
           "environments": {
-            "description": "App environments",
+            "description": "Environments within the app",
             "type": "array",
             "items": {
-              "$ref": "#/components/schemas/environmentHeader"
+              "$ref": "#/components/schemas/environment"
+            }
+          },
+          "stages": {
+            "description": "Stages within the app",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/stageHeader"
+            }
+          },
+          "segments": {
+            "description": "Segments within the app",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/segmentHeader"
             }
           }
         },
@@ -538,7 +1462,9 @@
           "name",
           "demo",
           "flagKeyFormat",
-          "environments"
+          "environments",
+          "stages",
+          "segments"
         ],
         "additionalProperties": false
       },
@@ -574,8 +1500,8 @@
           "kebabCaseLower"
         ]
       },
-      "environmentHeader": {
-        "description": "Basic environment information",
+      "environment": {
+        "description": "Environment details",
         "type": "object",
         "properties": {
           "id": {
@@ -591,16 +1517,117 @@
           },
           "order": {
             "description": "Environment order in the app (zero-indexed)",
-            "type": "number"
+            "type": "integer"
+          },
+          "flagStateVersion": {
+            "description": "Environment version incremented when flag state changes",
+            "type": "integer"
+          },
+          "sdkAccess": {
+            "description": "SDK access details",
+            "type": "object",
+            "properties": {
+              "publishableKey": {
+                "description": "Publishable key",
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 36
+              },
+              "secretKey": {
+                "description": "Secret key",
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 36
+              }
+            },
+            "required": [
+              "publishableKey",
+              "secretKey"
+            ],
+            "additionalProperties": false
           }
         },
         "required": [
           "id",
           "name",
           "isProduction",
+          "order",
+          "flagStateVersion",
+          "sdkAccess"
+        ],
+        "additionalProperties": false
+      },
+      "stageHeader": {
+        "description": "Stage's basic information",
+        "type": "object",
+        "properties": {
+          "id": {
+            "$ref": "#/components/schemas/stageId"
+          },
+          "name": {
+            "description": "Stage name",
+            "type": "string",
+            "minLength": 1
+          },
+          "color": {
+            "description": "Stage color (HTML color name or hex code)",
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 64
+          },
+          "order": {
+            "description": "Stage order",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "color",
           "order"
         ],
         "additionalProperties": false
+      },
+      "stageId": {
+        "description": "Stage identifier",
+        "type": "string",
+        "minLength": 1
+      },
+      "segmentHeader": {
+        "description": "Segment's basic information",
+        "type": "object",
+        "properties": {
+          "id": {
+            "$ref": "#/components/schemas/segmentId"
+          },
+          "name": {
+            "description": "Segment name",
+            "type": "string",
+            "minLength": 1
+          },
+          "type": {
+            "$ref": "#/components/schemas/segmentType"
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "type"
+        ],
+        "additionalProperties": false
+      },
+      "segmentId": {
+        "description": "Segment identifier",
+        "type": "string",
+        "minLength": 1
+      },
+      "segmentType": {
+        "description": "Segment type",
+        "type": "string",
+        "enum": [
+          "all",
+          "custom"
+        ]
       },
       "ErrorResponse": {
         "description": "The error response, including individual issues, if applicable",
@@ -658,11 +1685,11 @@
         "additionalProperties": false
       },
       "appHeaderCollection": {
-        "description": "Collection of basic app information",
+        "description": "Collection of Basic app information",
         "type": "object",
         "properties": {
           "data": {
-            "description": "Collection of apps",
+            "description": "The individual items in the collection",
             "type": "array",
             "items": {
               "$ref": "#/components/schemas/appHeader"
@@ -674,20 +1701,156 @@
         ],
         "additionalProperties": false
       },
+      "appHeader": {
+        "description": "Basic app information",
+        "type": "object",
+        "properties": {
+          "org": {
+            "$ref": "#/components/schemas/orgHeader"
+          },
+          "id": {
+            "$ref": "#/components/schemas/appId"
+          },
+          "name": {
+            "description": "App name",
+            "type": "string"
+          },
+          "demo": {
+            "description": "Whether the app is a demo app",
+            "type": "boolean"
+          },
+          "flagKeyFormat": {
+            "$ref": "#/components/schemas/flagKeyFormat"
+          },
+          "environments": {
+            "description": "Environments within the app",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/environmentHeader"
+            }
+          }
+        },
+        "required": [
+          "org",
+          "id",
+          "name",
+          "demo",
+          "flagKeyFormat",
+          "environments"
+        ],
+        "additionalProperties": false
+      },
+      "environmentHeader": {
+        "description": "Basic environment information",
+        "type": "object",
+        "properties": {
+          "id": {
+            "$ref": "#/components/schemas/envId"
+          },
+          "name": {
+            "description": "Environment name",
+            "type": "string"
+          },
+          "isProduction": {
+            "description": "Whether the environment is a production environment",
+            "type": "boolean"
+          },
+          "order": {
+            "description": "Environment order in the app (zero-indexed)",
+            "type": "integer"
+          },
+          "flagStateVersion": {
+            "description": "Environment version incremented when flag state changes",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "isProduction",
+          "order",
+          "flagStateVersion"
+        ],
+        "additionalProperties": false
+      },
+      "environmentHeaderCollection": {
+        "description": "Collection of Basic environment information",
+        "type": "object",
+        "properties": {
+          "data": {
+            "description": "The individual items in the collection",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/environmentHeader"
+            }
+          },
+          "sortOrder": {
+            "$ref": "#/components/schemas/sortOrder"
+          },
+          "sortBy": {
+            "$ref": "#/components/schemas/environmentHeaderSortByColumn"
+          }
+        },
+        "required": [
+          "data",
+          "sortOrder",
+          "sortBy"
+        ],
+        "additionalProperties": false
+      },
       "flagHeaderCollection": {
         "description": "Collection response containing flags",
         "type": "object",
         "properties": {
           "data": {
-            "description": "Collection of flags",
+            "description": "Page of the collection of flags",
             "type": "array",
             "items": {
               "$ref": "#/components/schemas/flagHeader"
             }
+          },
+          "totalCount": {
+            "description": "Total number of flags in collection",
+            "type": "integer"
+          },
+          "pageSize": {
+            "description": "Page size",
+            "type": "integer"
+          },
+          "pageIndex": {
+            "description": "Page index",
+            "type": "integer"
+          },
+          "sortBy": {
+            "description": "Sort by",
+            "type": "string",
+            "enum": [
+              "name",
+              "key",
+              "stage",
+              "autoFeedbackSurveysEnabled",
+              "createdAt",
+              "rolledOutToEveryoneAt",
+              "environmentStatus",
+              "owner",
+              "lastCheck",
+              "lastTrack",
+              "stale",
+              "archivingChecks"
+            ]
+          },
+          "sortOrder": {
+            "description": "Sort order",
+            "$ref": "#/components/schemas/sortOrder"
           }
         },
         "required": [
-          "data"
+          "data",
+          "totalCount",
+          "pageSize",
+          "pageIndex",
+          "sortBy",
+          "sortOrder"
         ],
         "additionalProperties": false
       },
@@ -695,6 +1858,9 @@
         "description": "Basic flag information",
         "type": "object",
         "properties": {
+          "id": {
+            "$ref": "#/components/schemas/flagId"
+          },
           "key": {
             "$ref": "#/components/schemas/flagKey"
           },
@@ -708,62 +1874,68 @@
             "description": "Flag description",
             "type": "string"
           },
-          "permanent": {
-            "description": "Whether the flag is permanent",
-            "type": "boolean"
-          },
-          "archived": {
-            "description": "Whether the flag is archived",
-            "type": "boolean"
-          },
           "stage": {
             "$ref": "#/components/schemas/stageHeader"
           },
           "owner": {
             "$ref": "#/components/schemas/reflagUserHeader"
-          }
-        },
-        "required": [
-          "key",
-          "name",
-          "permanent",
-          "archived"
-        ],
-        "additionalProperties": false
-      },
-      "stageHeader": {
-        "description": "Stage's basic information",
-        "type": "object",
-        "properties": {
-          "id": {
-            "$ref": "#/components/schemas/stageId"
           },
-          "name": {
-            "description": "Stage name",
-            "type": "string",
-            "minLength": 1
+          "archived": {
+            "description": "Whether the flag is archived",
+            "type": "boolean"
           },
-          "color": {
-            "description": "Stage color (HTML color name or hex code)",
+          "stale": {
+            "description": "Whether the flag is stale",
+            "type": "boolean"
+          },
+          "permanent": {
+            "description": "Whether the flag is permanent",
+            "type": "boolean"
+          },
+          "createdAt": {
+            "description": "Timestamp when the flag was created",
             "type": "string"
           },
-          "order": {
-            "description": "Stage order",
-            "type": "number"
+          "rolledOutToEveryoneAt": {
+            "description": "Timestamp when the flag was rolled out to everyone",
+            "type": "string"
+          },
+          "codeRefsCleanedUp": {
+            "description": "Whether code references for this flag have been cleaned up",
+            "type": "boolean"
+          },
+          "codeRefsMarkedCleanUserName": {
+            "description": "Name of the user who marked code references as cleaned up",
+            "type": "string"
+          },
+          "codeRefsMarkedCleanAt": {
+            "description": "Timestamp when code references were marked as cleaned up",
+            "type": "string"
+          },
+          "lastCheckAt": {
+            "description": "Timestamp when the flag was last checked",
+            "type": "string"
+          },
+          "noRecentChecks": {
+            "description": "Whether the flag has no recent access checks",
+            "type": "boolean"
+          },
+          "lastTrackAt": {
+            "description": "Timestamp when the flag was last tracked",
+            "type": "string"
           }
         },
         "required": [
           "id",
+          "key",
           "name",
-          "color",
-          "order"
+          "archived",
+          "stale",
+          "permanent",
+          "codeRefsCleanedUp",
+          "noRecentChecks"
         ],
         "additionalProperties": false
-      },
-      "stageId": {
-        "description": "Stage identifier",
-        "type": "string",
-        "minLength": 1
       },
       "reflagUserHeader": {
         "description": "Reflag user's basic information",
@@ -838,9 +2010,7 @@
       },
       "flagVersion": {
         "description": "Flag targeting version",
-        "type": "integer",
-        "minimum": -9007199254740991,
-        "maximum": 9007199254740991
+        "type": "integer"
       },
       "flagValue": {
         "description": "The value of the flag served to the audience.",
@@ -872,20 +2042,151 @@
         ],
         "additionalProperties": false
       },
-      "flagTargetingCollection": {
-        "description": "Collection response containing flags' targeting information",
+      "entityFlagsResponse": {
+        "description": "Response containing flags for an entity",
         "type": "object",
         "properties": {
           "data": {
-            "description": "Collection of flags' targeting information",
+            "description": "List of flags with their enabled status",
             "type": "array",
             "items": {
-              "$ref": "#/components/schemas/flagTargeting"
+              "$ref": "#/components/schemas/entityFlag"
             }
+          },
+          "totalCount": {
+            "description": "Total number of flags",
+            "type": "integer"
+          },
+          "pageSize": {
+            "description": "Page size",
+            "type": "integer"
+          },
+          "pageIndex": {
+            "description": "Page index",
+            "type": "integer"
           }
         },
         "required": [
-          "data"
+          "data",
+          "totalCount",
+          "pageSize",
+          "pageIndex"
+        ],
+        "additionalProperties": false
+      },
+      "entityFlag": {
+        "description": "Flag information with enabled status for an entity",
+        "type": "object",
+        "properties": {
+          "id": {
+            "$ref": "#/components/schemas/flagId"
+          },
+          "key": {
+            "$ref": "#/components/schemas/flagKey"
+          },
+          "name": {
+            "description": "Flag name",
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 255
+          },
+          "createdAt": {
+            "description": "Timestamp when the flag was created",
+            "type": "string"
+          },
+          "value": {
+            "description": "Whether the flag is enabled for this entity",
+            "type": "boolean"
+          },
+          "specificTargetValue": {
+            "description": "Value if directly added via specific targets, null if not specifically targeted",
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "firstExposureAt": {
+            "description": "First time the entity was exposed to this flag",
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "lastExposureAt": {
+            "description": "Last time the entity was exposed to this flag",
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "lastCheckAt": {
+            "description": "Last time the flag was checked for this entity",
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "exposureCount": {
+            "description": "Number of times the entity was exposed to this flag",
+            "type": "integer"
+          },
+          "firstTrackAt": {
+            "description": "First time a track event was recorded for this flag",
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "lastTrackAt": {
+            "description": "Last time a track event was recorded for this flag",
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "trackCount": {
+            "description": "Number of track events for this flag",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "id",
+          "key",
+          "name",
+          "createdAt",
+          "value",
+          "specificTargetValue",
+          "firstExposureAt",
+          "lastExposureAt",
+          "lastCheckAt",
+          "exposureCount",
+          "firstTrackAt",
+          "lastTrackAt",
+          "trackCount"
         ],
         "additionalProperties": false
       }

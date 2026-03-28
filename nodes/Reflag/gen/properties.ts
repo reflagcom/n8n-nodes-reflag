@@ -54,14 +54,62 @@ export const properties: INodeProperties[] = [
         }
       },
       {
-        "name": "List App Flags",
-        "value": "List App Flags",
+        "name": "List Environments",
+        "value": "List Environments",
+        "action": "List environments for application",
+        "description": "Retrieve all environments for a specific application",
+        "routing": {
+          "request": {
+            "method": "GET",
+            "url": "=/apps/{{$parameter[\"appId\"]}}/environments"
+          }
+        }
+      },
+      {
+        "name": "Get Environment",
+        "value": "Get Environment",
+        "action": "Get environment details",
+        "description": "Retrieve details for a specific environment",
+        "routing": {
+          "request": {
+            "method": "GET",
+            "url": "=/apps/{{$parameter[\"appId\"]}}/environments/{{$parameter[\"envId\"]}}"
+          }
+        }
+      },
+      {
+        "name": "List Flags",
+        "value": "List Flags",
         "action": "List flags for application",
         "description": "Retrieve all flags for a specific application",
         "routing": {
           "request": {
             "method": "GET",
             "url": "=/apps/{{$parameter[\"appId\"]}}/flags"
+          }
+        }
+      },
+      {
+        "name": "Create Flag",
+        "value": "Create Flag",
+        "action": "Create a flag",
+        "description": "Create a new flag in the application. Returns the created flag details.",
+        "routing": {
+          "request": {
+            "method": "POST",
+            "url": "=/apps/{{$parameter[\"appId\"]}}/flags"
+          }
+        }
+      },
+      {
+        "name": "Update Flag",
+        "value": "Update Flag",
+        "action": "Update a flag",
+        "description": "Update an existing flag",
+        "routing": {
+          "request": {
+            "method": "PATCH",
+            "url": "=/apps/{{$parameter[\"appId\"]}}/flags/{{$parameter[\"flagId\"]}}"
           }
         }
       },
@@ -78,14 +126,50 @@ export const properties: INodeProperties[] = [
         }
       },
       {
-        "name": "Update Bulk Flag Specific Targets",
-        "value": "Update Bulk Flag Specific Targets",
-        "action": "Update flag specific targets for an environment",
-        "description": "Update specific companies and users for flags in an environment",
+        "name": "Get Company Flags",
+        "value": "Get Company Flags",
+        "action": "Get flags for a company",
+        "description": "Retrieve all flags with their targeting status for a specific company",
+        "routing": {
+          "request": {
+            "method": "GET",
+            "url": "=/apps/{{$parameter[\"appId\"]}}/envs/{{$parameter[\"envId\"]}}/companies/{{$parameter[\"companyId\"]}}/flags"
+          }
+        }
+      },
+      {
+        "name": "Update Company Flags",
+        "value": "Update Company Flags",
+        "action": "Update flag targeting for a company",
+        "description": "Update specific targeting for flags for a company in an environment",
         "routing": {
           "request": {
             "method": "PATCH",
-            "url": "=/apps/{{$parameter[\"appId\"]}}/flags/specific-targets/{{$parameter[\"envId\"]}}"
+            "url": "=/apps/{{$parameter[\"appId\"]}}/envs/{{$parameter[\"envId\"]}}/companies/{{$parameter[\"companyId\"]}}/flags"
+          }
+        }
+      },
+      {
+        "name": "Get User Flags",
+        "value": "Get User Flags",
+        "action": "Get flags for a user",
+        "description": "Retrieve all flags with their targeting status for a specific user",
+        "routing": {
+          "request": {
+            "method": "GET",
+            "url": "=/apps/{{$parameter[\"appId\"]}}/envs/{{$parameter[\"envId\"]}}/users/{{$parameter[\"userId\"]}}/flags"
+          }
+        }
+      },
+      {
+        "name": "Update User Flags",
+        "value": "Update User Flags",
+        "action": "Update flag targeting for a user",
+        "description": "Update specific targeting for flags for a user in an environment",
+        "routing": {
+          "request": {
+            "method": "PATCH",
+            "url": "=/apps/{{$parameter[\"appId\"]}}/envs/{{$parameter[\"envId\"]}}/users/{{$parameter[\"userId\"]}}/flags"
           }
         }
       }
@@ -174,7 +258,7 @@ export const properties: INodeProperties[] = [
     }
   },
   {
-    "displayName": "GET /apps/{appId}/flags",
+    "displayName": "GET /apps/{appId}/environments",
     "name": "operation",
     "type": "notice",
     "typeOptions": {
@@ -187,7 +271,7 @@ export const properties: INodeProperties[] = [
           "Default"
         ],
         "operation": [
-          "List App Flags"
+          "List Environments"
         ]
       }
     }
@@ -205,7 +289,606 @@ export const properties: INodeProperties[] = [
           "Default"
         ],
         "operation": [
-          "List App Flags"
+          "List Environments"
+        ]
+      }
+    }
+  },
+  {
+    "displayName": "Sort Order",
+    "name": "sortOrder",
+    "description": "Sort order applied to the sorting column",
+    "default": "asc",
+    "type": "options",
+    "options": [
+      {
+        "name": "Asc",
+        "value": "asc"
+      },
+      {
+        "name": "Desc",
+        "value": "desc"
+      }
+    ],
+    "routing": {
+      "send": {
+        "type": "query",
+        "property": "sortOrder",
+        "value": "={{ $value }}",
+        "propertyInDotNotation": false
+      }
+    },
+    "displayOptions": {
+      "show": {
+        "resource": [
+          "Default"
+        ],
+        "operation": [
+          "List Environments"
+        ]
+      }
+    }
+  },
+  {
+    "displayName": "Sort By",
+    "name": "sortBy",
+    "description": "The column to sort by",
+    "default": "order",
+    "type": "options",
+    "options": [
+      {
+        "name": "Name",
+        "value": "name"
+      },
+      {
+        "name": "Order",
+        "value": "order"
+      }
+    ],
+    "routing": {
+      "send": {
+        "type": "query",
+        "property": "sortBy",
+        "value": "={{ $value }}",
+        "propertyInDotNotation": false
+      }
+    },
+    "displayOptions": {
+      "show": {
+        "resource": [
+          "Default"
+        ],
+        "operation": [
+          "List Environments"
+        ]
+      }
+    }
+  },
+  {
+    "displayName": "GET /apps/{appId}/environments/{envId}",
+    "name": "operation",
+    "type": "notice",
+    "typeOptions": {
+      "theme": "info"
+    },
+    "default": "",
+    "displayOptions": {
+      "show": {
+        "resource": [
+          "Default"
+        ],
+        "operation": [
+          "Get Environment"
+        ]
+      }
+    }
+  },
+  {
+    "displayName": "App Id",
+    "name": "appId",
+    "required": true,
+    "description": "App identifier",
+    "default": "",
+    "type": "string",
+    "displayOptions": {
+      "show": {
+        "resource": [
+          "Default"
+        ],
+        "operation": [
+          "Get Environment"
+        ]
+      }
+    }
+  },
+  {
+    "displayName": "Env Id",
+    "name": "envId",
+    "required": true,
+    "description": "Environment identifier",
+    "default": "",
+    "type": "string",
+    "displayOptions": {
+      "show": {
+        "resource": [
+          "Default"
+        ],
+        "operation": [
+          "Get Environment"
+        ]
+      }
+    }
+  },
+  {
+    "displayName": "GET /apps/{appId}/flags",
+    "name": "operation",
+    "type": "notice",
+    "typeOptions": {
+      "theme": "info"
+    },
+    "default": "",
+    "displayOptions": {
+      "show": {
+        "resource": [
+          "Default"
+        ],
+        "operation": [
+          "List Flags"
+        ]
+      }
+    }
+  },
+  {
+    "displayName": "App Id",
+    "name": "appId",
+    "required": true,
+    "description": "App identifier",
+    "default": "",
+    "type": "string",
+    "displayOptions": {
+      "show": {
+        "resource": [
+          "Default"
+        ],
+        "operation": [
+          "List Flags"
+        ]
+      }
+    }
+  },
+  {
+    "displayName": "POST /apps/{appId}/flags",
+    "name": "operation",
+    "type": "notice",
+    "typeOptions": {
+      "theme": "info"
+    },
+    "default": "",
+    "displayOptions": {
+      "show": {
+        "resource": [
+          "Default"
+        ],
+        "operation": [
+          "Create Flag"
+        ]
+      }
+    }
+  },
+  {
+    "displayName": "App Id",
+    "name": "appId",
+    "required": true,
+    "description": "App identifier",
+    "default": "",
+    "type": "string",
+    "displayOptions": {
+      "show": {
+        "resource": [
+          "Default"
+        ],
+        "operation": [
+          "Create Flag"
+        ]
+      }
+    }
+  },
+  {
+    "required": true,
+    "displayName": "Key",
+    "name": "key",
+    "type": "string",
+    "default": "",
+    "description": "Key of the flag",
+    "routing": {
+      "send": {
+        "property": "key",
+        "propertyInDotNotation": false,
+        "type": "body",
+        "value": "={{ $value }}"
+      }
+    },
+    "displayOptions": {
+      "show": {
+        "resource": [
+          "Default"
+        ],
+        "operation": [
+          "Create Flag"
+        ]
+      }
+    }
+  },
+  {
+    "required": true,
+    "displayName": "Name",
+    "name": "name",
+    "type": "string",
+    "default": "",
+    "description": "Name of the flag",
+    "routing": {
+      "send": {
+        "property": "name",
+        "propertyInDotNotation": false,
+        "type": "body",
+        "value": "={{ $value }}"
+      }
+    },
+    "displayOptions": {
+      "show": {
+        "resource": [
+          "Default"
+        ],
+        "operation": [
+          "Create Flag"
+        ]
+      }
+    }
+  },
+  {
+    "displayName": "Description",
+    "name": "description",
+    "type": "string",
+    "default": "",
+    "routing": {
+      "send": {
+        "property": "description",
+        "propertyInDotNotation": false,
+        "type": "body",
+        "value": "={{ $value }}"
+      }
+    },
+    "displayOptions": {
+      "show": {
+        "resource": [
+          "Default"
+        ],
+        "operation": [
+          "Create Flag"
+        ]
+      }
+    }
+  },
+  {
+    "displayName": "Stage Id",
+    "name": "stageId",
+    "type": "string",
+    "default": "",
+    "description": "Stage ID of the flag",
+    "routing": {
+      "send": {
+        "property": "stageId",
+        "propertyInDotNotation": false,
+        "type": "body",
+        "value": "={{ $value }}"
+      }
+    },
+    "displayOptions": {
+      "show": {
+        "resource": [
+          "Default"
+        ],
+        "operation": [
+          "Create Flag"
+        ]
+      }
+    }
+  },
+  {
+    "displayName": "Owner User Id",
+    "name": "ownerUserId",
+    "type": "string",
+    "default": "",
+    "routing": {
+      "send": {
+        "property": "ownerUserId",
+        "propertyInDotNotation": false,
+        "type": "body",
+        "value": "={{ $value }}"
+      }
+    },
+    "displayOptions": {
+      "show": {
+        "resource": [
+          "Default"
+        ],
+        "operation": [
+          "Create Flag"
+        ]
+      }
+    }
+  },
+  {
+    "displayName": "Permanent",
+    "name": "permanent",
+    "type": "boolean",
+    "default": false,
+    "routing": {
+      "send": {
+        "property": "permanent",
+        "propertyInDotNotation": false,
+        "type": "body",
+        "value": "={{ $value }}"
+      }
+    },
+    "displayOptions": {
+      "show": {
+        "resource": [
+          "Default"
+        ],
+        "operation": [
+          "Create Flag"
+        ]
+      }
+    }
+  },
+  {
+    "displayName": "Secret",
+    "name": "secret",
+    "type": "boolean",
+    "default": true,
+    "description": "Whether the flag is secret",
+    "routing": {
+      "send": {
+        "property": "secret",
+        "propertyInDotNotation": false,
+        "type": "body",
+        "value": "={{ $value }}"
+      }
+    },
+    "displayOptions": {
+      "show": {
+        "resource": [
+          "Default"
+        ],
+        "operation": [
+          "Create Flag"
+        ]
+      }
+    }
+  },
+  {
+    "displayName": "PATCH /apps/{appId}/flags/{flagId}",
+    "name": "operation",
+    "type": "notice",
+    "typeOptions": {
+      "theme": "info"
+    },
+    "default": "",
+    "displayOptions": {
+      "show": {
+        "resource": [
+          "Default"
+        ],
+        "operation": [
+          "Update Flag"
+        ]
+      }
+    }
+  },
+  {
+    "displayName": "App Id",
+    "name": "appId",
+    "required": true,
+    "description": "App identifier",
+    "default": "",
+    "type": "string",
+    "displayOptions": {
+      "show": {
+        "resource": [
+          "Default"
+        ],
+        "operation": [
+          "Update Flag"
+        ]
+      }
+    }
+  },
+  {
+    "displayName": "Flag Id",
+    "name": "flagId",
+    "required": true,
+    "description": "Flag ID",
+    "default": "",
+    "type": "string",
+    "displayOptions": {
+      "show": {
+        "resource": [
+          "Default"
+        ],
+        "operation": [
+          "Update Flag"
+        ]
+      }
+    }
+  },
+  {
+    "displayName": "Name",
+    "name": "name",
+    "type": "string",
+    "default": "",
+    "description": "Name of the flag",
+    "routing": {
+      "send": {
+        "property": "name",
+        "propertyInDotNotation": false,
+        "type": "body",
+        "value": "={{ $value }}"
+      }
+    },
+    "displayOptions": {
+      "show": {
+        "resource": [
+          "Default"
+        ],
+        "operation": [
+          "Update Flag"
+        ]
+      }
+    }
+  },
+  {
+    "displayName": "Description",
+    "name": "description",
+    "type": "string",
+    "default": "",
+    "routing": {
+      "send": {
+        "property": "description",
+        "propertyInDotNotation": false,
+        "type": "body",
+        "value": "={{ $value }}"
+      }
+    },
+    "displayOptions": {
+      "show": {
+        "resource": [
+          "Default"
+        ],
+        "operation": [
+          "Update Flag"
+        ]
+      }
+    }
+  },
+  {
+    "displayName": "Owner User Id",
+    "name": "ownerUserId",
+    "type": "string",
+    "default": "",
+    "routing": {
+      "send": {
+        "property": "ownerUserId",
+        "propertyInDotNotation": false,
+        "type": "body",
+        "value": "={{ $value }}"
+      }
+    },
+    "displayOptions": {
+      "show": {
+        "resource": [
+          "Default"
+        ],
+        "operation": [
+          "Update Flag"
+        ]
+      }
+    }
+  },
+  {
+    "displayName": "Permanent",
+    "name": "permanent",
+    "type": "boolean",
+    "default": true,
+    "routing": {
+      "send": {
+        "property": "permanent",
+        "propertyInDotNotation": false,
+        "type": "body",
+        "value": "={{ $value }}"
+      }
+    },
+    "displayOptions": {
+      "show": {
+        "resource": [
+          "Default"
+        ],
+        "operation": [
+          "Update Flag"
+        ]
+      }
+    }
+  },
+  {
+    "displayName": "Secret",
+    "name": "secret",
+    "type": "boolean",
+    "default": true,
+    "description": "Whether the flag is secret",
+    "routing": {
+      "send": {
+        "property": "secret",
+        "propertyInDotNotation": false,
+        "type": "body",
+        "value": "={{ $value }}"
+      }
+    },
+    "displayOptions": {
+      "show": {
+        "resource": [
+          "Default"
+        ],
+        "operation": [
+          "Update Flag"
+        ]
+      }
+    }
+  },
+  {
+    "displayName": "Is Archived",
+    "name": "isArchived",
+    "type": "boolean",
+    "default": true,
+    "routing": {
+      "send": {
+        "property": "isArchived",
+        "propertyInDotNotation": false,
+        "type": "body",
+        "value": "={{ $value }}"
+      }
+    },
+    "displayOptions": {
+      "show": {
+        "resource": [
+          "Default"
+        ],
+        "operation": [
+          "Update Flag"
+        ]
+      }
+    }
+  },
+  {
+    "displayName": "Stage Id",
+    "name": "stageId",
+    "type": "string",
+    "default": "",
+    "description": "Stage ID of the flag",
+    "routing": {
+      "send": {
+        "property": "stageId",
+        "propertyInDotNotation": false,
+        "type": "body",
+        "value": "={{ $value }}"
+      }
+    },
+    "displayOptions": {
+      "show": {
+        "resource": [
+          "Default"
+        ],
+        "operation": [
+          "Update Flag"
         ]
       }
     }
@@ -284,7 +967,7 @@ export const properties: INodeProperties[] = [
     }
   },
   {
-    "displayName": "PATCH /apps/{appId}/flags/specific-targets/{envId}",
+    "displayName": "GET /apps/{appId}/envs/{envId}/companies/{companyId}/flags",
     "name": "operation",
     "type": "notice",
     "typeOptions": {
@@ -297,7 +980,7 @@ export const properties: INodeProperties[] = [
           "Default"
         ],
         "operation": [
-          "Update Bulk Flag Specific Targets"
+          "Get Company Flags"
         ]
       }
     }
@@ -315,7 +998,7 @@ export const properties: INodeProperties[] = [
           "Default"
         ],
         "operation": [
-          "Update Bulk Flag Specific Targets"
+          "Get Company Flags"
         ]
       }
     }
@@ -333,7 +1016,98 @@ export const properties: INodeProperties[] = [
           "Default"
         ],
         "operation": [
-          "Update Bulk Flag Specific Targets"
+          "Get Company Flags"
+        ]
+      }
+    }
+  },
+  {
+    "displayName": "Company Id",
+    "name": "companyId",
+    "required": true,
+    "description": "Company ID within your application",
+    "default": "",
+    "type": "string",
+    "displayOptions": {
+      "show": {
+        "resource": [
+          "Default"
+        ],
+        "operation": [
+          "Get Company Flags"
+        ]
+      }
+    }
+  },
+  {
+    "displayName": "PATCH /apps/{appId}/envs/{envId}/companies/{companyId}/flags",
+    "name": "operation",
+    "type": "notice",
+    "typeOptions": {
+      "theme": "info"
+    },
+    "default": "",
+    "displayOptions": {
+      "show": {
+        "resource": [
+          "Default"
+        ],
+        "operation": [
+          "Update Company Flags"
+        ]
+      }
+    }
+  },
+  {
+    "displayName": "App Id",
+    "name": "appId",
+    "required": true,
+    "description": "App identifier",
+    "default": "",
+    "type": "string",
+    "displayOptions": {
+      "show": {
+        "resource": [
+          "Default"
+        ],
+        "operation": [
+          "Update Company Flags"
+        ]
+      }
+    }
+  },
+  {
+    "displayName": "Env Id",
+    "name": "envId",
+    "required": true,
+    "description": "Environment identifier",
+    "default": "",
+    "type": "string",
+    "displayOptions": {
+      "show": {
+        "resource": [
+          "Default"
+        ],
+        "operation": [
+          "Update Company Flags"
+        ]
+      }
+    }
+  },
+  {
+    "displayName": "Company Id",
+    "name": "companyId",
+    "required": true,
+    "description": "Company ID within your application",
+    "default": "",
+    "type": "string",
+    "displayOptions": {
+      "show": {
+        "resource": [
+          "Default"
+        ],
+        "operation": [
+          "Update Company Flags"
         ]
       }
     }
@@ -344,7 +1118,7 @@ export const properties: INodeProperties[] = [
     "name": "updates",
     "type": "json",
     "default": "[\n  {}\n]",
-    "description": "The list of updates to make to the flags' targeting",
+    "description": "List of flag updates to apply",
     "routing": {
       "send": {
         "property": "updates",
@@ -359,32 +1133,7 @@ export const properties: INodeProperties[] = [
           "Default"
         ],
         "operation": [
-          "Update Bulk Flag Specific Targets"
-        ]
-      }
-    }
-  },
-  {
-    "displayName": "Notifications",
-    "name": "notifications",
-    "type": "boolean",
-    "default": true,
-    "description": "Whether to send notifications about the change to configured integration (eg. Slack, Linear, etc). Defaults to true.",
-    "routing": {
-      "send": {
-        "property": "notifications",
-        "propertyInDotNotation": false,
-        "type": "body",
-        "value": "={{ $value }}"
-      }
-    },
-    "displayOptions": {
-      "show": {
-        "resource": [
-          "Default"
-        ],
-        "operation": [
-          "Update Bulk Flag Specific Targets"
+          "Update Company Flags"
         ]
       }
     }
@@ -394,7 +1143,7 @@ export const properties: INodeProperties[] = [
     "name": "changeDescription",
     "type": "string",
     "default": "",
-    "description": "The description of the change recorded in the change history",
+    "description": "Description of the change for audit history",
     "routing": {
       "send": {
         "property": "changeDescription",
@@ -409,7 +1158,254 @@ export const properties: INodeProperties[] = [
           "Default"
         ],
         "operation": [
-          "Update Bulk Flag Specific Targets"
+          "Update Company Flags"
+        ]
+      }
+    }
+  },
+  {
+    "displayName": "Notifications",
+    "name": "notifications",
+    "type": "json",
+    "default": "[\n  null\n]",
+    "description": "Destination list for notifications about the change. Use [] to disable notifications. Omit to use configured defaults.",
+    "routing": {
+      "send": {
+        "property": "notifications",
+        "propertyInDotNotation": false,
+        "type": "body",
+        "value": "={{ JSON.parse($value) }}"
+      }
+    },
+    "displayOptions": {
+      "show": {
+        "resource": [
+          "Default"
+        ],
+        "operation": [
+          "Update Company Flags"
+        ]
+      }
+    }
+  },
+  {
+    "displayName": "GET /apps/{appId}/envs/{envId}/users/{userId}/flags",
+    "name": "operation",
+    "type": "notice",
+    "typeOptions": {
+      "theme": "info"
+    },
+    "default": "",
+    "displayOptions": {
+      "show": {
+        "resource": [
+          "Default"
+        ],
+        "operation": [
+          "Get User Flags"
+        ]
+      }
+    }
+  },
+  {
+    "displayName": "App Id",
+    "name": "appId",
+    "required": true,
+    "description": "App identifier",
+    "default": "",
+    "type": "string",
+    "displayOptions": {
+      "show": {
+        "resource": [
+          "Default"
+        ],
+        "operation": [
+          "Get User Flags"
+        ]
+      }
+    }
+  },
+  {
+    "displayName": "Env Id",
+    "name": "envId",
+    "required": true,
+    "description": "Environment identifier",
+    "default": "",
+    "type": "string",
+    "displayOptions": {
+      "show": {
+        "resource": [
+          "Default"
+        ],
+        "operation": [
+          "Get User Flags"
+        ]
+      }
+    }
+  },
+  {
+    "displayName": "User Id",
+    "name": "userId",
+    "required": true,
+    "description": "User ID within your application",
+    "default": "",
+    "type": "string",
+    "displayOptions": {
+      "show": {
+        "resource": [
+          "Default"
+        ],
+        "operation": [
+          "Get User Flags"
+        ]
+      }
+    }
+  },
+  {
+    "displayName": "PATCH /apps/{appId}/envs/{envId}/users/{userId}/flags",
+    "name": "operation",
+    "type": "notice",
+    "typeOptions": {
+      "theme": "info"
+    },
+    "default": "",
+    "displayOptions": {
+      "show": {
+        "resource": [
+          "Default"
+        ],
+        "operation": [
+          "Update User Flags"
+        ]
+      }
+    }
+  },
+  {
+    "displayName": "App Id",
+    "name": "appId",
+    "required": true,
+    "description": "App identifier",
+    "default": "",
+    "type": "string",
+    "displayOptions": {
+      "show": {
+        "resource": [
+          "Default"
+        ],
+        "operation": [
+          "Update User Flags"
+        ]
+      }
+    }
+  },
+  {
+    "displayName": "Env Id",
+    "name": "envId",
+    "required": true,
+    "description": "Environment identifier",
+    "default": "",
+    "type": "string",
+    "displayOptions": {
+      "show": {
+        "resource": [
+          "Default"
+        ],
+        "operation": [
+          "Update User Flags"
+        ]
+      }
+    }
+  },
+  {
+    "displayName": "User Id",
+    "name": "userId",
+    "required": true,
+    "description": "User ID within your application",
+    "default": "",
+    "type": "string",
+    "displayOptions": {
+      "show": {
+        "resource": [
+          "Default"
+        ],
+        "operation": [
+          "Update User Flags"
+        ]
+      }
+    }
+  },
+  {
+    "required": true,
+    "displayName": "Updates",
+    "name": "updates",
+    "type": "json",
+    "default": "[\n  {}\n]",
+    "description": "List of flag updates to apply",
+    "routing": {
+      "send": {
+        "property": "updates",
+        "propertyInDotNotation": false,
+        "type": "body",
+        "value": "={{ JSON.parse($value) }}"
+      }
+    },
+    "displayOptions": {
+      "show": {
+        "resource": [
+          "Default"
+        ],
+        "operation": [
+          "Update User Flags"
+        ]
+      }
+    }
+  },
+  {
+    "displayName": "Change Description",
+    "name": "changeDescription",
+    "type": "string",
+    "default": "",
+    "description": "Description of the change for audit history",
+    "routing": {
+      "send": {
+        "property": "changeDescription",
+        "propertyInDotNotation": false,
+        "type": "body",
+        "value": "={{ $value }}"
+      }
+    },
+    "displayOptions": {
+      "show": {
+        "resource": [
+          "Default"
+        ],
+        "operation": [
+          "Update User Flags"
+        ]
+      }
+    }
+  },
+  {
+    "displayName": "Notifications",
+    "name": "notifications",
+    "type": "json",
+    "default": "[\n  null\n]",
+    "description": "Destination list for notifications about the change. Use [] to disable notifications. Omit to use configured defaults.",
+    "routing": {
+      "send": {
+        "property": "notifications",
+        "propertyInDotNotation": false,
+        "type": "body",
+        "value": "={{ JSON.parse($value) }}"
+      }
+    },
+    "displayOptions": {
+      "show": {
+        "resource": [
+          "Default"
+        ],
+        "operation": [
+          "Update User Flags"
         ]
       }
     }
